@@ -10,20 +10,20 @@ from store import TinyDBStore
 FIELDS = [
     {
         'name': 'name',
-        'message': 'Send me name of the event'
+        'message': 'Envieu-me el nom de l\'excursió'
     },
     {
         'name': 'description',
-        'message': 'Please send me the description of event (or /skip)',
+        'message': 'Envieu-me una breu descripció de l\'excursió (o /skip per deixar el camp en blanc)',
         'required': False
     },
     {
         'name': 'date',
-        'message': 'Please send me the date of event (e.g.: 10/25/16 12:20)',
+        'message': 'Envieu-me la data i hora de sortida de l\'excursió (ex.: 10/25/16 12:20)',
     },
     {
         'name': 'place',
-        'message': 'Please send me the place of event (or /skip)',
+        'message': 'Envieu-me el punt de trobada per iniciar l\'excursió (o /skip per deixar el camp en blanc)',
         'required': False
     },
 ]
@@ -39,7 +39,7 @@ def parse_fields(field, value):
 
 
 def help_command(bot, update):
-    bot.sendMessage(update.message.chat_id, text='Type in any chat: @createeventbot [event name]')
+    bot.sendMessage(update.message.chat_id, text='Aquest bot és privat i només alguns usuaris poden crear esdeveniments per a excursions.')
 
 
 class CommandsModule(object):
@@ -56,7 +56,7 @@ class CommandsModule(object):
         user_id = update.message.from_user.id
         self.store.new_draft(user_id)
         bot.sendMessage(update.message.chat_id,
-                        text="Let's create a new event. First, send me name of the event.")
+                        text="Crearem un esdeveniment per a una excursió. El primer que heu de fer és enviar-me el nom de l\'excursió.")
 
     def message(self, bot, update):
         user_id = update.message.from_user.id
@@ -83,7 +83,7 @@ class CommandsModule(object):
 
             if field['required']:
                 bot.sendMessage(update.message.chat_id,
-                                text="This field is required! " + field['message'])
+                                text="Aquest camp és necessari. " + field['message'])
             else:
                 event = draft['event']
                 current_field += 1
@@ -105,10 +105,10 @@ class CommandsModule(object):
         self.store.insert_event(event)
         self.store.remove_draft(update.message.from_user.id)
 
-        keyboard = [[InlineKeyboardButton(text='Send event', switch_inline_query=event['name'])], []]
+        keyboard = [[InlineKeyboardButton(text="Envia l'excursió", switch_inline_query=event['name'])], []]
         bot.sendMessage(
             update.message.chat_id,
-            text="Event created!",
+            text="S'ha creat l'excursió",
             reply_markup=InlineKeyboardMarkup(inline_keyboard=keyboard)
         )
 

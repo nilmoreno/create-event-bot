@@ -19,18 +19,18 @@ def create_event_payload(event):
 def create_keyboard(event, user):
     buttons = [
         InlineKeyboardButton(
-            text="Calendar",
+            text="Calendari",
             url='https://lukaville.github.com/create-event-bot/static/add.html#' + create_event_payload(event)
         ),
         InlineKeyboardButton(
-            text="Join",
+            text="Afegeix-m'hi",
             callback_data='go_' + str(event.eid)
         )
     ]
 
     if event.get('place'):
         buttons.append(InlineKeyboardButton(
-            text="Map",
+            text="Mapa",
             url='https://maps.google.com/?q=' + parse.quote(event.get('place'))
         ))
 
@@ -56,7 +56,7 @@ def create_event_message(event, user):
         message_text += Emoji.ROUND_PUSHPIN + ' ' + event['place'] + '\n'
 
     if 'users' in event and len(event['users']) > 0:
-        message_text += '\nWill go: \n'
+        message_text += '\nHi aniran: \n'
         for u in event['users']:
             if u.get('username'):
                 message_text += '@' + u['username'] + ' '
@@ -129,7 +129,7 @@ class InlineModule(object):
         bot.answerInlineQuery(
             update.inline_query.id,
             results=results,
-            switch_pm_text='Create new event...',
+            switch_pm_text='Crea una excursió nova...',
             switch_pm_parameter='new',
             is_personal=True
         )
