@@ -52,10 +52,10 @@ def create_event_message(event, user):
     )
 
     if 'description' in event:
-        message_text += '_' + event['description'] + '_\n'
+        message_text += '\n_' + event['description'] + '_\n'
 
     if 'place' in event:
-        message_text += Emoji.ROUND_PUSHPIN + ' ' + event['place'] + '\n'
+        message_text += '\n' + Emoji.ROUND_PUSHPIN + ' ' + event['place'] + '\n'
 
     if 'users' in event and len(event['users']) > 0:
         message_text += '\nHi aniran: \n'
