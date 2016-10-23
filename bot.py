@@ -28,7 +28,7 @@ def load_modules(dispatcher, modules):
 
 
 def main():
-    updater = Updater(os.getenv('TELEGRAM_TOKEN'))
+    updater = Updater('TELEGRAM_TOKEN')
 
     dp = updater.dispatcher
 

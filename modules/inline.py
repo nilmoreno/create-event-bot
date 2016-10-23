@@ -3,7 +3,7 @@
 import base64
 import datetime
 import json
-from urllib import parse
+from six.moves import urllib
 
 from telegram import InlineQueryResultArticle, ParseMode, \
     InputTextMessageContent, InlineKeyboardButton, InlineKeyboardMarkup, Emoji
@@ -15,7 +15,7 @@ from store import TinyDBStore
 def create_event_payload(event):
     event_string = json.dumps(event)
     eight_bit_string = base64.b64encode(event_string.encode('ascii'))
-    return parse.quote(eight_bit_string.decode('ascii'))
+    return urllib.parse.quote(eight_bit_string.decode('ascii'))
 
 
 def create_keyboard(event, user):
@@ -33,7 +33,7 @@ def create_keyboard(event, user):
     if event.get('place'):
         buttons.append(InlineKeyboardButton(
             text="Mapa",
-            url='https://maps.google.com/?q=' + parse.quote(event.get('place'))
+            url='https://maps.google.com/?q=' + urllib.parse.quote(event.get('place'))
         ))
 
     return [buttons, []]
