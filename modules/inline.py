@@ -33,7 +33,7 @@ def create_keyboard(event, user):
     if event.get('place'):
         buttons.append(InlineKeyboardButton(
             text="Mapa",
-            url='https://maps.google.com/?q=' + urllib.parse.quote(event.get('place'))
+            url='http://www.openstreetmap.org/search?query=' + urllib.parse.quote(event.get('place'))
         ))
 
     return [buttons, []]
@@ -120,7 +120,7 @@ class InlineModule(object):
             result = InlineQueryResultArticle(id=event.eid,
                                               title=event['name'],
                                               description=format_date(event['date']),
-                                              thumb_url='https://i.imgur.com/BgTaSzk.png',
+                                              thumb_url='https://raw.githubusercontent.com/nilmoreno/create-event-bot/master/images/celp_bot_calendar.png',
                                               input_message_content=InputTextMessageContent(
                                                   create_event_message(event, user),
                                                   parse_mode=ParseMode.MARKDOWN
