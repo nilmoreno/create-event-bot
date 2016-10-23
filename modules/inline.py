@@ -42,7 +42,7 @@ def create_keyboard(event, user):
 def format_date(param):
     timestamp = int(param)
     date = datetime.datetime.fromtimestamp(timestamp)
-    return date.strftime("%m/%d/%Y %H:%M")
+    return date.strftime("%A, %d %B %Y a les %H.%M hores")
 
 
 def create_event_message(event, user):
