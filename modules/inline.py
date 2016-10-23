@@ -2,6 +2,7 @@
 
 import base64
 import datetime
+import locale
 import json
 from six.moves import urllib
 
@@ -40,6 +41,7 @@ def create_keyboard(event, user):
 
 
 def format_date(param):
+    locale.setlocale(locale.LC_TIME, "ca_ES.utf8")
     timestamp = int(param)
     date = datetime.datetime.fromtimestamp(timestamp)
     return date.strftime("%A, %d %B %Y a les %H.%M hores")
