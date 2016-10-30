@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-
 import base64
 import datetime
 import locale
@@ -22,18 +21,18 @@ def create_event_payload(event):
 def create_keyboard(event, user):
     buttons = [
         InlineKeyboardButton(
-            text="Calendari",
-            url='https://lukaville.github.com/create-event-bot/static/add.html#' + create_event_payload(event)
+            text="\U0001F4C6 Calendari",
+            url='http://www.konfraria.org/calendari_celp/add.html#' + create_event_payload(event)
         ),
         InlineKeyboardButton(
-            text="Afegeix-m'hi",
+            text="\U0001F465 Afegeix-m'hi",
             callback_data='go_' + str(event.eid)
         )
     ]
 
     if event.get('place'):
         buttons.append(InlineKeyboardButton(
-            text="Mapa",
+            text="\U0001F5FA Mapa",
             url='http://www.openstreetmap.org/search?query=' + urllib.parse.quote(event.get('place'))
         ))
 
@@ -57,10 +56,13 @@ def create_event_message(event, user):
         message_text += '\n_' + event['description'] + '_\n'
 
     if 'place' in event:
-        message_text += '\n' + Emoji.ROUND_PUSHPIN + ' ' + event['place'] + '\n'
+        message_text += '\n' + Emoji.ROUND_PUSHPIN + ' ' + event['place']
+
+    if 'route' in event:
+        message_text += '\n' + Emoji.CLOCKWISE_DOWNWARDS_AND_UPWARDS_OPEN_CIRCLE_ARROWS + ' [Mapa amb la ruta](' + event['route'] + ')'
 
     if 'users' in event and len(event['users']) > 0:
-        message_text += '\nHi aniran: \n'
+        message_text += '\n\nHi aniran: \n'
         for u in event['users']:
             message_text += '\U0001F449\U0001F3FC '
             if u.get('username'):
@@ -70,6 +72,8 @@ def create_event_message(event, user):
             if u.get('last_name'):
                 message_text += ' ' + u['last_name']
             message_text += '\n'
+
+#    message_text += "\nSi teniu problemes amb els botons, sisplau notifiqueu-ho [aquí](https://telegram.me/KonfrareAlbert)."
 
     return message_text
 

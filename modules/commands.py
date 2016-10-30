@@ -28,6 +28,11 @@ FIELDS = [
         'message': 'Envieu-me el punt de trobada per iniciar l\'excursió (o /skip per deixar el camp en blanc)',
         'required': False
     },
+    {
+        'name': 'route',
+        'message': 'Envieu-me l\'URL del mapa amb el GPX de la ruta (o /skip per deixar el camp en blanc)',
+        'required': False
+    },
 ]
 
 
@@ -56,9 +61,15 @@ class CommandsModule(object):
 
     def start_command(self, bot, update, args):
         user_id = update.message.from_user.id
-        self.store.new_draft(user_id)
-        bot.sendMessage(update.message.chat_id,
+        # Replace USER_ID with your user_id number:
+        if user_id == USER_ID:
+            self.store.new_draft(user_id)
+            bot.sendMessage(update.message.chat_id,
                         text="Crearem un esdeveniment per a una excursió. El primer que heu de fer és enviar-me el nom de l\'excursió.")
+        else:
+            f_name = update.message.from_user.first_name
+            bot.sendMessage(update.message.chat_id,
+                        text= str(f_name) + ", no teniu permisos per crear excursions \U0001F622.\nSi necessiteu permisos, us caldrà el vostre identificador d'usuari.\n\U0001F194 = " + str(user_id) + ".")
 
     def message(self, bot, update):
         user_id = update.message.from_user.id
