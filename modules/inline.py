@@ -2,6 +2,7 @@
 
 import base64
 import datetime
+import locale
 import json
 from six.moves import urllib
 
@@ -40,6 +41,7 @@ def create_keyboard(event, user):
 
 
 def format_date(param):
+    locale.setlocale(locale.LC_TIME, "ca_ES.utf8")
     timestamp = int(param)
     date = datetime.datetime.fromtimestamp(timestamp)
     return date.strftime("%A, %d %B %Y a les %H.%M hores")
@@ -52,21 +54,22 @@ def create_event_message(event, user):
     )
 
     if 'description' in event:
-        message_text += '_' + event['description'] + '_\n'
+        message_text += '\n_' + event['description'] + '_\n'
 
     if 'place' in event:
-        message_text += Emoji.ROUND_PUSHPIN + ' ' + event['place'] + '\n'
+        message_text += '\n' + Emoji.ROUND_PUSHPIN + ' ' + event['place'] + '\n'
 
     if 'users' in event and len(event['users']) > 0:
         message_text += '\nHi aniran: \n'
         for u in event['users']:
+            message_text += '\U0001F449\U0001F3FC '
             if u.get('username'):
-                message_text += '@' + u['username'] + ' '
+                message_text += '@' + u['username'] + ' - '
 
-            message_text += '(' + u['first_name']
+            message_text += u['first_name']
             if u.get('last_name'):
                 message_text += ' ' + u['last_name']
-            message_text += ')\n'
+            message_text += '\n'
 
     return message_text
 
