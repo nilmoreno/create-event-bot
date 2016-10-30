@@ -11,11 +11,26 @@ function fillCard(event) {
     $('#description').html(event.description);
 
     // Create place link
+    if (event.place) {
     var place = $('#place');
-    place.html(event.place);
+    place.html('<img draggable="false" class="emoji" alt="󾔿" src="http://twemoji.maxcdn.com/16x16/1f4cd.png"> ' + event.place + '<br>');
     place.click(function () {
-        window.open('https://maps.google.com/?q=' + event.place);
+        window.open('http://www.openstreetmap.org/search?query=' + event.place);
     });
+    };
+
+    // Create route link
+    if (event.route) {
+    var route = $('#route');
+    route.html('<img draggable="false" class="emoji" alt="🔃" src="http://twemoji.maxcdn.com/16x16/1f503.png"> Mapa amb la ruta');
+    route.click(function () {
+        window.open(event.route);
+    });
+
+    // Create route iframe
+    var iframe = '<center><iframe scrolling="no" height="400" frameborder="0" width="100%" src="' + event.route +'"></iframe></center><br><br>'; 
+    document.getElementById('iframe').innerHTML=iframe;
+    };
 
     // Format and show date
     var date = new Date(parseInt(event.date) * 1000);
@@ -38,7 +53,7 @@ function fillCard(event) {
 
     $('<img/>').attr('src', imageUrl).load(function () {
         $(this).remove();
-        $('.event').css('background-image', 'url(' + imageUrl + ')');
+        $('.picture').css('background-image', 'url(' + imageUrl + ')');
         showCard();
     });
 }
