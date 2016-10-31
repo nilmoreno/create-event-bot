@@ -28,19 +28,15 @@ def create_keyboard(event, user):
 
     buttons = [
         InlineKeyboardButton(
-            text="\U0001F4C6",
+            text="\U0001F4C6 Calendari",
             url='http://www.konfraria.org/calendari_celp/add.html#' + create_event_payload(event)
-        ),
-        InlineKeyboardButton(
-            text="\U0001F5FA",
-            url=event.get('route')
         )
     ]
 
-    if event.get('place'):
+    if event.get('route'):
         buttons.append(InlineKeyboardButton(
-            text="\U0001F4CD",
-            url='http://www.openstreetmap.org/search?query=' + urllib.parse.quote(event.get('place'))
+            text="\U0001F5FA Ruta",
+            url=event.get('route')
         ))
 
     return [button, buttons, []]
@@ -63,7 +59,7 @@ def create_event_message(event, user):
         message_text += '\n_' + event['description'] + '_\n'
 
     if 'place' in event:
-        message_text += '\n' + Emoji.ROUND_PUSHPIN + ' ' + event['place']
+        message_text += '\n' + Emoji.ROUND_PUSHPIN + ' ' + event['place'] + ' [(mapa)](http://www.openstreetmap.org/search?query=' + urllib.parse.quote(event.get("place")) + ')'
 
 #   if 'route' in event:
 #       message_text += '\n' + Emoji.CLOCKWISE_DOWNWARDS_AND_UPWARDS_OPEN_CIRCLE_ARROWS + ' [Mapa amb la ruta](' + event['route'] + ')'
