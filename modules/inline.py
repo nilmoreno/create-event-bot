@@ -19,24 +19,31 @@ def create_event_payload(event):
 
 
 def create_keyboard(event, user):
+    button = [
+        InlineKeyboardButton(
+            text="\U0001F465 Afegeix-m'hi / treu-me'n",
+            callback_data='go_' + str(event.eid)
+        )
+    ]
+
     buttons = [
         InlineKeyboardButton(
-            text="\U0001F4C6 Calendari",
+            text="\U0001F4C6",
             url='http://www.konfraria.org/calendari_celp/add.html#' + create_event_payload(event)
         ),
         InlineKeyboardButton(
-            text="\U0001F465 Afegeix-m'hi",
-            callback_data='go_' + str(event.eid)
+            text="\U0001F5FA",
+            url=event.get('route')
         )
     ]
 
     if event.get('place'):
         buttons.append(InlineKeyboardButton(
-            text="\U0001F5FA Mapa",
+            text="\U0001F4CD",
             url='http://www.openstreetmap.org/search?query=' + urllib.parse.quote(event.get('place'))
         ))
 
-    return [buttons, []]
+    return [button, buttons, []]
 
 
 def format_date(param):
@@ -58,8 +65,8 @@ def create_event_message(event, user):
     if 'place' in event:
         message_text += '\n' + Emoji.ROUND_PUSHPIN + ' ' + event['place']
 
-    if 'route' in event:
-        message_text += '\n' + Emoji.CLOCKWISE_DOWNWARDS_AND_UPWARDS_OPEN_CIRCLE_ARROWS + ' [Mapa amb la ruta](' + event['route'] + ')'
+#   if 'route' in event:
+#       message_text += '\n' + Emoji.CLOCKWISE_DOWNWARDS_AND_UPWARDS_OPEN_CIRCLE_ARROWS + ' [Mapa amb la ruta](' + event['route'] + ')'
 
     if 'users' in event and len(event['users']) > 0:
         message_text += '\n\nHi aniran: \n'
