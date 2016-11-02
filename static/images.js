@@ -28,6 +28,18 @@ function getImage(event) {
 }
 
 var keywords = {
+    "cadí": {
+        "ca": ["Cadí", "Serra del Cadí"],
+    },
+    "collserola": {
+        "ca": ["Collserola"],
+    },
+    "garraf": {
+        "ca": ["Garraf"],
+    },
+    "llobregat": {
+        "ca": ["Delta del Llobregat", "Parc agrari del Baix Llobregat", "Riu Llobregat"],
+    },
     "montseny": {
         "ca": ["Montseny"],
     },
@@ -37,12 +49,7 @@ var keywords = {
     "ordal": {
         "ca": ["Ordal"],
     },
-    "repair": {
-        "en": ["repair", "fridge repair", "handyman", "electrician", "diy"],
-        "ru": ["ремонт", "ремонт холодильника", "мастер", "электрик", "самоделк"],
-    },
-    "swimming": {
-        "en": ["swim", "swimming", "swims"],
-        "ru": ["плавание", "бассейн"]
+    "pirineus": {
+        "ca": ["Pirineu", "Pirineus"],
     }
 };
