@@ -28,7 +28,7 @@ function fillCard(event) {
     });
 
     // Create route iframe
-    var iframe = '<center><iframe scrolling="no" height="400" frameborder="0" width="100%" src="' + event.route +'"></iframe></center><br><br>'; 
+    var iframe = '<center><iframe scrolling="yes" height="400" frameborder="0" width="100%" src="' + event.route +'"></iframe></center><br><br>'; 
     document.getElementById('iframe').innerHTML=iframe;
     };
 
@@ -39,11 +39,12 @@ function fillCard(event) {
         year: 'numeric',
         month: 'long',
         day: 'numeric',
+        weekday: 'long',
         hour: 'numeric',
         minute: 'numeric'
     };
 
-    var formattedDate = date.toLocaleDateString(navigator.language, options);
+    var formattedDate = date.toLocaleDateString('ca-ES', options);
 
     $('#date').html(formattedDate);
 
