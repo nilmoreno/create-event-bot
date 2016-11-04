@@ -19,24 +19,27 @@ def create_event_payload(event):
 
 
 def create_keyboard(event, user):
-    buttons = [
+    button = [
         InlineKeyboardButton(
-            text="\U0001F4C6 Calendari",
-            url='http://www.konfraria.org/calendari_celp/add.html#' + create_event_payload(event)
-        ),
-        InlineKeyboardButton(
-            text="\U0001F465 Afegeix-m'hi",
+            text="\U0001F465 Afegeix-m'hi / treu-me'n",
             callback_data='go_' + str(event.eid)
         )
     ]
 
-    if event.get('place'):
+    buttons = [
+        InlineKeyboardButton(
+            text="\U0001F4C6 Calendari",
+            url='http://www.konfraria.org/calendari_celp/add.html#' + create_event_payload(event)
+        )
+    ]
+
+    if event.get('route'):
         buttons.append(InlineKeyboardButton(
-            text="\U0001F5FA Mapa",
-            url='http://www.openstreetmap.org/search?query=' + urllib.parse.quote(event.get('place'))
+            text="\U0001F5FA Ruta",
+            url=event.get('route')
         ))
 
-    return [buttons, []]
+    return [button, buttons, []]
 
 
 def format_date(param):
@@ -56,13 +59,13 @@ def create_event_message(event, user):
         message_text += '\n_' + event['description'] + '_\n'
 
     if 'place' in event:
-        message_text += '\n' + Emoji.ROUND_PUSHPIN + ' ' + event['place']
+        message_text += '\n' + Emoji.ROUND_PUSHPIN + ' ' + event['place'] + ' [(mapa)](http://www.openstreetmap.org/search?query=' + urllib.parse.quote(event.get("place")) + ')\n'
 
-    if 'route' in event:
-        message_text += '\n' + Emoji.CLOCKWISE_DOWNWARDS_AND_UPWARDS_OPEN_CIRCLE_ARROWS + ' [Mapa amb la ruta](' + event['route'] + ')'
+#   if 'route' in event:
+#       message_text += '\n' + Emoji.CLOCKWISE_DOWNWARDS_AND_UPWARDS_OPEN_CIRCLE_ARROWS + ' [Mapa amb la ruta](' + event['route'] + ')'
 
     if 'users' in event and len(event['users']) > 0:
-        message_text += '\n\nHi aniran: \n'
+        message_text += '\nHi aniran: \n'
         for u in event['users']:
             message_text += '\U0001F449\U0001F3FC '
             if u.get('username'):
@@ -72,8 +75,9 @@ def create_event_message(event, user):
             if u.get('last_name'):
                 message_text += ' ' + u['last_name']
             message_text += '\n'
-
-#    message_text += "\nSi teniu problemes amb els botons, sisplau notifiqueu-ho [aquí](https://telegram.me/KonfrareAlbert)."
+    
+    # Replace user by administrator username
+    message_text += "\n\U0001F527 Si no us funcionen els botons, si us plau notifiqueu-ho [aquí](https://telegram.me/USER)."
 
     return message_text
 
@@ -100,7 +104,8 @@ class InlineModule(object):
         bot.editMessageText(text=create_event_message(event, user),
                             inline_message_id=query.inline_message_id,
                             reply_markup=InlineKeyboardMarkup(inline_keyboard=create_keyboard(event, user)),
-                            parse_mode=ParseMode.MARKDOWN)
+                            parse_mode=ParseMode.MARKDOWN,
+			    disable_web_page_preview=True)
 
     def toggle_user(self, event, user):
         if not event.get('users'):
@@ -130,7 +135,8 @@ class InlineModule(object):
                                               thumb_url='https://raw.githubusercontent.com/nilmoreno/create-event-bot/master/images/celp_bot_calendar.png',
                                               input_message_content=InputTextMessageContent(
                                                   create_event_message(event, user),
-                                                  parse_mode=ParseMode.MARKDOWN
+                                                  parse_mode=ParseMode.MARKDOWN,
+						  disable_web_page_preview=True
                                               ),
                                               reply_markup=InlineKeyboardMarkup(inline_keyboard=keyboard))
             results.append(result)
