@@ -44,7 +44,7 @@ function fillCard(event) {
         minute: 'numeric'
     };
 
-    var formattedDate = date.toLocaleDateString(navigator.language, options);
+    var formattedDate = date.toLocaleDateString('ca-ES', options);
 
     $('#date').html(formattedDate);
 
