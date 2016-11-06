@@ -9,7 +9,7 @@ if (screen.width<=700) {
 L.Control.Elevation = L.Control.extend({
     options: {
         position: "bottomright",
-	theme: "lime-theme",
+	theme: "steelblue-theme",
         width: controlwidth,
         height: controlheight,
         margins: {
@@ -28,8 +28,8 @@ L.Control.Elevation = L.Control.extend({
         xTicks: undefined,
         yTicks: undefined,
         collapsed: false,
-        yAxisMin: 0,
-        yAxisMax: undefined,
+        yAxisMin: altmin,
+        yAxisMax: altmax,
         forceAxisBounds: false
     },
 
