@@ -28,17 +28,38 @@ function getImage(event) {
 }
 
 var keywords = {
+    "albera": {
+        "ca": ["l'Albera"],
+    },
     "cadí": {
         "ca": ["Cadí", "Serra del Cadí"],
     },
     "collserola": {
         "ca": ["Collserola"],
     },
+    "costabrava": {
+        "ca": ["Costa Brava", "camí de ronda"],
+    },
+    "ebre": {
+        "ca": ["Delta de l'Ebre"],
+    },
     "garraf": {
         "ca": ["Garraf"],
     },
+    "guilleries": {
+        "ca": ["Guilleries"],
+    },
     "llobregat": {
         "ca": ["Delta del Llobregat", "Parc agrari del Baix Llobregat", "Riu Llobregat"],
+    },
+    "montnegre": {
+        "ca": ["Montnegre"],
+    },
+    "montsant": {
+        "ca": ["Montsant"],
+    },
+    "montsec": {
+        "ca": ["Montsec"],
     },
     "montseny": {
         "ca": ["Montseny"],
@@ -46,10 +67,22 @@ var keywords = {
     "montserrat": {
         "ca": ["Montserrat"],
     },
+    "montsià": {
+        "ca": ["Montsià"],
+    },
     "ordal": {
         "ca": ["Ordal"],
     },
+    "pedraforca": {
+        "ca": ["Pedraforca"],
+    },
     "pirineus": {
         "ca": ["Pirineu", "Pirineus"],
+    },
+    "ports": {
+        "ca": ["Ports de Beseït"],
+    },
+    "santllorenc": {
+        "ca": ["Sant Llorenç de Munt", "Sant Llorenç del Munt", "Sant Llorenç-Obac", "Sant Llorenç-l'Obac", "Obac"],
     }
 };
