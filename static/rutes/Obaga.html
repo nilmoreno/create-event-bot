@@ -1,7 +1,9 @@
 <!DOCTYPE html>
 <html>
 <head>
+	<!-- INDICAR NOM DE LA PÀGINA -->
 	<title>Obaga</title>
+	<link rel="shortcut icon" href="../favicon.png"/>
 	<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
 	 <style>
 	   html, body, #map {
@@ -11,39 +13,73 @@
 	      margin:0px;
 	   }
 	</style>
-	<script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
-	<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.2/leaflet.css" />
 	<!--[if lte IE 8]><link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.2/leaflet.ie.css" /><![endif]-->
-
-	<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css" rel="stylesheet">
-	<link rel="stylesheet" href="lib/leaflet.elevation-0.0.4.css" />
-	<link rel="stylesheet" href="./lib/leaflet-gpx/L.Control.Locate.css" />
-
-	<script type="text/javascript" src="http://cdn.leafletjs.com/leaflet-0.7.2/leaflet.js"></script>
-	<script type="text/javascript" src="lib/leaflet.elevation-0.0.4.src.js"></script>
-	<script type="text/javascript" src="./lib/leaflet-gpx/gpx.js"></script>
-	<script src="./lib/leaflet-gpx/L.Control.Locate.js" ></script>
-        
+	<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css">
+	<link rel="stylesheet" href="assets/css/leaflet-0.7.2.css" />
+	<link rel="stylesheet" href="assets/css/leaflet.elevation-0.0.4.css" />
+	<link rel="stylesheet" href="assets/css/L.Control.Locate.css" />
+	<link rel="stylesheet" href="assets/css/leaflet-control-credits.css" />
+	
+	<script type="text/javascript">
+        /* INDICAR ALÇADA MÀXIMA DEL PERFIL */
+	var altmax = 600
+	var altmin = 0
+	</script>
+	<script type="text/javascript" src="assets/js/d3.v3.min.js" charset="utf-8"></script>
+	<script type="text/javascript" src="assets/js/leaflet-0.7.2.js"></script>
+        <script type="text/javascript" src="assets/js/L.Control.Locate.js" ></script>
+        <script type="text/javascript" src="assets/js/leaflet-side-by-side.js"></script>
+	<script type="text/javascript" src="assets/js/leaflet.elevation-0.0.4.src.js"></script>
+	<script type="text/javascript" src="assets/js/gpx.js"></script>
+	<script type="text/javascript" src="assets/js/leaflet-control-credits.js"></script>
+	 
 </head>
 <body>
 
 	<div id="map"></div>
 
 	<script type="text/javascript">
-		var map = new L.Map('map');
+	var map = L.map('map').setView([41.716, 1.708], 8);
 
-		var url = 'http://{s}.tile.thunderforest.com/cycle/{z}/{x}/{y}.png',
-			attr ='Tessel&middot;les <a href="http://thunderforest.com/opencyclemap/" target="_blank">ThunderForest</a> &mdash; Dades del mapa &copy; Contribu&iuml;dors <a href="http://openstreetmap.org">OpenStreetMap</a>, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>',
-			service = new L.TileLayer(url, {attribution: attr});
+   	var osmLayer = L.tileLayer('http://{s}.tile.thunderforest.com/outdoors/{z}/{x}/{y}.png', {
+        attribution: 'Tessel&middot;les de <a href="http://mapbox.com/">MapBox<\/a> (sat&egrave;l&middot;lit)'
+        }).addTo(map);
 
+        var stamenLayer = L.tileLayer('http://{s}.tiles.mapbox.com/v3/51114u9.kogin3jb/{z}/{x}/{y}.png', {
+        attribution:
+            'i tessel&middot;les de <a href="http://thunderforest.com">Thunderforest<\/a>, ' +
+            '<a href="http://creativecommons.org/licenses/by-sa/2.0">CC BY-SA 2.0<\/a> &mdash; ' +
+            'Dades del mapa &copy; Contribu&iuml;dors <a href="http://osm.org/copyright">OpenStreetMap<\/a>',
+        minZoom: 1,
+        maxZoom: 18
+        }).addTo(map)
+
+	lc = L.control.locate({
+    		strings: {
+      		  title: "Localitza'm al mapa"
+  		  }
+	}).addTo(map);
+
+	L.controlCredits({
+              /*image: "assets/img/celp.png",*/
+        	image: "assets/img/celp2.png",
+        	link: "http://celapalma.jimdo.com/",
+        	text: "@celp_bot per <b>CELP</b><br />Centre excursionista<br />de la Palma"
+        }).addTo(map);
+
+	L.control.sideBySide(stamenLayer, osmLayer).addTo(map);
+	</script>
+
+	<script type="text/javascript">
 		var el = L.control.elevation();
 		el.addTo(map);
+		/* INDICAR RUTA FITXER GPX */
 		var g=new L.GPX("./gpx/obaga.gpx", {
 			async: true,
 			 marker_options: {
-			    startIconUrl: './lib/leaflet-gpx/pin-icon-start.png',
-			    endIconUrl: './lib/leaflet-gpx/pin-icon-end.png',
-			    shadowUrl: './lib/leaflet-gpx/pin-shadow.png'
+			    startIconUrl: './assets/img/pin-icon-start.png',
+			    endIconUrl: './assets/img/pin-icon-end.png',
+			    shadowUrl: './assets/img/pin-shadow.png'
 			  }
 		});
 		g.on('loaded', function(e) {
@@ -54,13 +90,6 @@
 		});
 		g.addTo(map);
 		map.addLayer(service);
-
-		lc = L.control.locate({
-    		strings: {
-      		  title: "Localitza'm al mapa"
-  		  }
-		}).addTo(map);
-
 	</script>
 </body>
 </html>
