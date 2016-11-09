@@ -12,25 +12,25 @@ from store import TinyDBStore
 FIELDS = [
     {
         'name': 'name',
-        'message': 'Envieu-me el nom de l\'excursió'
+        'message': 'Envieu-me el nom de l\'excursió.\n\nPer a cancel·lar el procés envieu /cancel'
     },
     {
         'name': 'description',
-        'message': 'Envieu-me una breu descripció de l\'excursió (o /skip per deixar el camp en blanc)',
+        'message': 'Envieu-me una breu descripció de l\'excursió.\n\nPodeu enviar /skip per a deixar el camp en blanc o /cancel per a cancel·lar la creació de l\'excursió.',
         'required': False
     },
     {
         'name': 'date',
-        'message': 'Envieu-me la data i hora de sortida de l\'excursió (ex.: 10/25/16 12:20)',
+        'message': 'Envieu-me la data i hora de sortida de l\'excursió (ex.: 10/25/16 12:20, seguint l\'ordre mes/dia/any hora:minut).\n\nPer a cancel·lar el procés envieu /cancel',
     },
     {
         'name': 'place',
-        'message': 'Envieu-me el punt de trobada per iniciar l\'excursió (o /skip per deixar el camp en blanc)',
+        'message': 'Envieu-me el punt de trobada per iniciar l\'excursió.\n\nPodeu enviar /skip per a deixar el camp en blanc o /cancel per a cancel·lar la creació de l\'excursió.',
         'required': False
     },
     {
         'name': 'route',
-        'message': 'Envieu-me l\'URL del mapa amb el GPX de la ruta (o /skip per deixar el camp en blanc)',
+        'message': 'Envieu-me l\'URL del mapa amb el GPX de la ruta.\n\nPodeu enviar /skip per a deixar el camp en blanc o /cancel per a cancel·lar el procés de creació de l\'excursió.',
         'required': False
     },
 ]
@@ -54,6 +54,7 @@ class CommandsModule(object):
         self.handlers = [
             CommandHandler('start', self.start_command, pass_args=True),
             CommandHandler('skip', self.skip_command),
+	    CommandHandler('cancel', self.cancel_command),
             CommandHandler('help', help_command),
             MessageHandler([Filters.text], self.message)
         ]
@@ -65,7 +66,7 @@ class CommandsModule(object):
         if user_id == USER_ID:
             self.store.new_draft(user_id)
             bot.sendMessage(update.message.chat_id,
-                        text="Crearem un esdeveniment per a una excursió. El primer que heu de fer és enviar-me el nom de l\'excursió.")
+                        text="Crearem un esdeveniment per a una excursió. El primer que heu de fer és enviar-me el nom de l\'excursió.\n\nSi no voleu continuar amb el procés, envieu /cancel")
         else:
             f_name = update.message.from_user.first_name
             bot.sendMessage(update.message.chat_id,
@@ -85,6 +86,22 @@ class CommandsModule(object):
             current_field += 1
 
             self.update_draft(bot, event, user_id, update, current_field)
+
+    def cancel_command(self, bot, update):
+        user_id = update.message.from_user.id
+        draft = self.store.get_draft(user_id)
+
+        if draft:
+            self.store.remove_draft(update.message.from_user.id)
+            bot.sendMessage(
+            update.message.chat_id,
+            text="S'ha cancel·lat la creació de l'excursió."
+            )
+        else:
+            bot.sendMessage(
+            update.message.chat_id,
+            text="No hi ha res a cancel·lar.\nAquesta comanda només funciona quan s'ha iniciat la creació d'una excursió."
+        )
 
     def skip_command(self, bot, update):
         user_id = update.message.from_user.id
