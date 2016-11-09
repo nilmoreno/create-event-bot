@@ -12,25 +12,25 @@ from store import TinyDBStore
 FIELDS = [
     {
         'name': 'name',
-        'message': 'Envieu-me el nom de l\'excursió.\n\nPer a cancel·lar el procés envieu /cancel'
+        'message': '\u0031\u20E3 Envieu-me el *nom de l\'excursió*.\n\nPer a cancel·lar el procés envieu /cancel.'
     },
     {
         'name': 'description',
-        'message': 'Envieu-me una breu descripció de l\'excursió.\n\nPodeu enviar /skip per a deixar el camp en blanc o /cancel per a cancel·lar la creació de l\'excursió.',
+        'message': '\u0032\u20E3 Envieu-me una *breu descripció* de l\'excursió.\n\nPodeu enviar /skip per a deixar el camp en blanc o /cancel per a cancel·lar la creació de l\'excursió.',
         'required': False
     },
     {
         'name': 'date',
-        'message': 'Envieu-me la data i hora de sortida de l\'excursió (ex.: 10/25/16 12:20, seguint l\'ordre mes/dia/any hora:minut).\n\nPer a cancel·lar el procés envieu /cancel',
+        'message': '\u0033\u20E3 Envieu-me la *data i hora* de sortida de l\'excursió (ex.: 10/25/16 12:20, seguint l\'ordre *mes/dia/any hora:minut*).\n\nPer a cancel·lar el procés envieu /cancel.',
     },
     {
         'name': 'place',
-        'message': 'Envieu-me el punt de trobada per iniciar l\'excursió.\n\nPodeu enviar /skip per a deixar el camp en blanc o /cancel per a cancel·lar la creació de l\'excursió.',
+        'message': '\u0034\u20E3 Envieu-me el *punt de trobada* per iniciar l\'excursió.\n\nPodeu enviar /skip per a deixar el camp en blanc o /cancel per a cancel·lar la creació de l\'excursió.',
         'required': False
     },
     {
         'name': 'route',
-        'message': 'Envieu-me l\'URL del mapa amb el GPX de la ruta.\n\nPodeu enviar /skip per a deixar el camp en blanc o /cancel per a cancel·lar el procés de creació de l\'excursió.',
+        'message': '\u0035\u20E3 Envieu-me l\'*URL del mapa amb el GPX de la ruta*. Aquí també podeu enviar l\'URL d\'una pàgina de _Wikiloc_, per exemple.\n\nPodeu enviar /skip per a deixar el camp en blanc o /cancel per a cancel·lar el procés de creació de l\'excursió.',
         'required': False
     },
 ]
@@ -65,8 +65,8 @@ class CommandsModule(object):
         # Replace USER_ID with your user_id number:
         if user_id == USER_ID:
             self.store.new_draft(user_id)
-            bot.sendMessage(update.message.chat_id,
-                        text="Crearem un esdeveniment per a una excursió. El primer que heu de fer és enviar-me el nom de l\'excursió.\n\nSi no voleu continuar amb el procés, envieu /cancel")
+            bot.sendMessage(update.message.chat_id,parse_mode='Markdown',
+                        text="Crearem un esdeveniment per a una excursió.\n\n\u0031\u20E3 El primer que heu de fer és enviar-me el *nom de l\'excursió*.\n\nSi no voleu continuar amb el procés, envieu /cancel.")
         else:
             f_name = update.message.from_user.first_name
             bot.sendMessage(update.message.chat_id,
@@ -95,7 +95,7 @@ class CommandsModule(object):
             self.store.remove_draft(update.message.from_user.id)
             bot.sendMessage(
             update.message.chat_id,
-            text="S'ha cancel·lat la creació de l'excursió."
+            text="\U0001F5D1 S'ha cancel·lat la creació de l'excursió."
             )
         else:
             bot.sendMessage(
@@ -125,6 +125,7 @@ class CommandsModule(object):
         if current_field <= len(FIELDS) - 1:
             bot.sendMessage(
                 update.message.chat_id,
+                parse_mode='Markdown',
                 text=FIELDS[current_field]['message']
             )
         else:
