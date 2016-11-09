@@ -12,7 +12,8 @@ from store import TinyDBStore
 FIELDS = [
     {
         'name': 'name',
-        'message': '\u0031\u20E3 Envieu-me el *nom de l\'excursió*.\n\nPer a cancel·lar el procés envieu /cancel.'
+        'message': '\u0031\u20E3 Envieu-me el *nom de l\'excursió*.\n\nPer a cancel·lar el procés envieu /cancel.',
+        'required': True
     },
     {
         'name': 'description',
@@ -22,6 +23,7 @@ FIELDS = [
     {
         'name': 'date',
         'message': '\u0033\u20E3 Envieu-me la *data i hora* de sortida de l\'excursió (ex.: 10/25/16 12:20, seguint l\'ordre *mes/dia/any hora:minut*).\n\nPer a cancel·lar el procés envieu /cancel.',
+        'required': True
     },
     {
         'name': 'place',
@@ -100,7 +102,7 @@ class CommandsModule(object):
         else:
             bot.sendMessage(
             update.message.chat_id,
-            text="No hi ha res a cancel·lar.\nAquesta comanda només funciona quan s'ha iniciat la creació d'una excursió."
+            text="\u26A0\uFE0F No hi ha res a cancel·lar.\nAquesta comanda només funciona quan s'ha iniciat la creació d'una excursió."
         )
 
     def skip_command(self, bot, update):
@@ -112,12 +114,16 @@ class CommandsModule(object):
             field = FIELDS[current_field]
 
             if field['required']:
-                bot.sendMessage(update.message.chat_id,
-                                text="Aquest camp és necessari. " + field['message'])
+                bot.sendMessage(update.message.chat_id,parse_mode='Markdown',
+                                text="\u26A0\uFE0F Aquest camp és necessari.\n\n" + field['message'])
             else:
                 event = draft['event']
                 current_field += 1
                 self.update_draft(bot, event, user_id, update, current_field)
+
+        else:
+            bot.sendMessage(update.message.chat_id,
+                            text="\u26A0\uFE0F Aquesta ordre només té sentit si s'està creant una excursió i es vol deixar en blanc un camp que no és necessari.")
 
     def update_draft(self, bot, event, user_id, update, current_field):
         self.store.update_draft(user_id, event, current_field)
