@@ -153,7 +153,7 @@ class CommandsModule(object):
     def start_command(self, bot, update, args):
         user_id = update.message.from_user.id
         # Replace USER_ID with your user_id number:
-        if user_id == 4150967 or user_id == 11116766 or user_id == 5858895:
+        if user_id == USER_ID:
             self.store.new_draft(user_id)
             bot.sendMessage(update.message.chat_id,parse_mode='Markdown',
                         text="Crearem un esdeveniment per a una excursió.\n\n\u0031\u20E3 El primer que heu de fer és enviar-me el *nom de l\'excursió*.\n\nSi no voleu continuar amb el procés, envieu /cancel.",
