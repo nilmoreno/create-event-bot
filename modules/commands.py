@@ -6,6 +6,7 @@ from datetime import datetime
 from parsedatetime import parsedatetime
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, ReplyKeyboardMarkup, ReplyKeyboardHide
 from telegram.ext import CommandHandler, MessageHandler, Filters
+from validators import url, ValidationFailure
 
 from store import TinyDBStore
 
@@ -42,7 +43,7 @@ FIELDS = [
     },
     {
         'name': 'minute',
-        'message': '\U0001F570 I per acabar, seleccioneu el *minut* d\'entre els quatre quarts:',
+        'message': '\U0001F570 I per acabar, seleccioneu el *minut* d\'entre els quatre quarts o escriviu qualsevol nombre entre 0 i 59:',
         'required': True
     },
     {
@@ -64,11 +65,73 @@ FIELDS = [
 
 
 def parse_fields(field, value):
+    if field == 'month':
+        if value == 'Gener' or value == 'Febrer' or value == 'Març' or value == 'Abril' or value == 'Maig' or value == 'Juny' or value == 'Juliol' or value == 'Agost' or value == 'Setembre' or value == 'Octubre' or value == 'Novembre' or value == 'Desembre':  
+             return value
+        elif value == 'gener' or value == 'febrer' or value == 'març' or value == 'abril' or value == 'maig' or value == 'juny' or value == 'juliol' or value == 'agost' or value == 'setembre' or value == 'octubre' or value == 'novembre' or value == 'desembre':
+             valuecap = value.capitalize()  
+             return valuecap
+        else:
+             error = 'error'
+             return error
+    if field == 'day':
+        try:
+             value2 = int(value)
+        except:
+             error = 'error'
+             return error
+        if value2 >= 1 and value2 <= 31:
+             return value
+        else:
+             error = 'error'
+             return error
+    if field == 'year':
+        actualdate = datetime.now()
+        actualyear = int(actualdate.year)
+        try:
+             value2 = int(value)
+        except:
+             error = 'error'
+             return error
+        if value2 >= actualyear and value2 <= actualyear + 3:
+             return value
+        else:
+             error = 'error'
+             return error
+    if field == 'hour':
+        try:
+             value2 = int(value)
+        except:
+             error = 'error'
+             return error
+        if value2 >= 0 and value2 <= 23:
+             return value
+        else:
+             error = 'error'
+             return error
+    if field == 'minute':
+        try:
+             value2 = int(value)
+        except:
+             error = 'error'
+             return error
+        if value2 >= 0 and value2 <= 59:
+             return value
+        else:
+             error = 'error'
+             return error
     if field == 'date':
         cal = parsedatetime.Calendar()
         time_struct, parse_status = cal.parse(value)
         timestamp = time.mktime(datetime(*time_struct[:6]).timetuple())
         return str(int(timestamp))
+    if field == 'route':
+        try:
+             assert url(value)
+             return value
+        except:
+             error = 'error'
+             return error
     return value
 
 
@@ -90,7 +153,7 @@ class CommandsModule(object):
     def start_command(self, bot, update, args):
         user_id = update.message.from_user.id
         # Replace USER_ID with your user_id number:
-        if user_id == USER_ID:
+        if user_id == 4150967 or user_id == 11116766 or user_id == 5858895:
             self.store.new_draft(user_id)
             bot.sendMessage(update.message.chat_id,parse_mode='Markdown',
                         text="Crearem un esdeveniment per a una excursió.\n\n\u0031\u20E3 El primer que heu de fer és enviar-me el *nom de l\'excursió*.\n\nSi no voleu continuar amb el procés, envieu /cancel.",
@@ -111,9 +174,60 @@ class CommandsModule(object):
             field = FIELDS[current_field]
 
             event[field['name']] = parse_fields(field['name'], text)
-            current_field += 1
+            if field['name'] == 'day' and event['day'] == 'error':
+                  bot.sendMessage(
+                  update.message.chat_id,
+                  text="\u26A0\uFE0F No és un dia vàlid, assegureu-vos què és un nombre entre 1 i 31 i torneu-ho a provar."
+                  )
+                  current_field += 0
+                  self.update_draft(bot, event, user_id, update, current_field)
 
-            self.update_draft(bot, event, user_id, update, current_field)
+            elif field['name'] == 'month' and event['month'] == 'error':
+                  bot.sendMessage(
+                  update.message.chat_id,
+                  text="\u26A0\uFE0F No és un mes vàlid, escriviu-lo amb lletres i en català i torneu-ho a provar."
+                  )
+                  current_field += 0
+                  self.update_draft(bot, event, user_id, update, current_field)
+
+            elif field['name'] == 'year' and event['year'] == 'error':
+                  actualdate = datetime.now()
+                  actualyear = int(actualdate.year)
+                  bot.sendMessage(
+                  update.message.chat_id,
+                  text="\u26A0\uFE0F No és un any vàlid, heu d'escriure " + str(actualyear) + ", " + str(actualyear + 1) + ", " + str(actualyear + 2) + " o " + str(actualyear + 3) + " i torneu-ho a provar."
+                  )
+                  current_field += 0
+                  self.update_draft(bot, event, user_id, update, current_field)
+
+            elif field['name'] == 'hour' and event['hour'] == 'error':
+                  bot.sendMessage(
+                  update.message.chat_id,
+                  text="\u26A0\uFE0F No és una hora vàlida, assegureu-vos que és un nombre entre 0 i 23 i torneu-ho a provar."
+                  )
+                  current_field += 0
+                  self.update_draft(bot, event, user_id, update, current_field)
+
+            elif field['name'] == 'minute' and event['minute'] == 'error':
+                  bot.sendMessage(
+                  update.message.chat_id,
+                  text="\u26A0\uFE0F No és un minut vàlid, assegureu-vos què és un nombre entre 0 i 59 i torneu-ho a provar."
+                  )
+                  current_field += 0
+                  self.update_draft(bot, event, user_id, update, current_field)
+
+            elif field['name'] == 'route' and event['route'] == 'error':
+                  bot.sendMessage(
+                  update.message.chat_id,
+                  text="\u26A0\uFE0F Sembla que l'URL que heu enviat no és vàlid, comproveu-lo i torneu-lo a enviar."
+                  )
+                  current_field += 0
+                  self.update_draft(bot, event, user_id, update, current_field)
+
+            else:
+                  current_field += 1
+
+                  self.update_draft(bot, event, user_id, update, current_field)
 
         else:
             bot.sendMessage(
@@ -260,13 +374,19 @@ class CommandsModule(object):
                 ))
 
             elif FIELDS[current_field]['name'] == 'year':
+                now = datetime.now()
+                now2 = int(now.year)
+                now3 = str(now2)
+                next1 = str(now2 + 1)
+                next2 = str(now2 + 2)
+                next3 = str(now2 + 3)
                 bot.sendMessage(
                     update.message.chat_id,
                     parse_mode='Markdown',
                     text=FIELDS[current_field]['message'],
                     reply_markup=ReplyKeyboardMarkup(
                          keyboard=[
-                              ['2016','2017'],['2018','2019']
+                              [now3],[next1],[next2],[next3]
                          ],
                          one_time_keyboard=True,
                          resize_keyboard=True
