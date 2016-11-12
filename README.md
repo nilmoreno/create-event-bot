@@ -8,14 +8,14 @@
 Descripció
 ----------
 
-> El bot està pensat perquè només alguns administradors del centre excursionista puguin crear excursions, aquest és el motiu pel qual el bot és privat.
+> El robot està pensat perquè només alguns administradors del centre excursionista puguin crear excursions, aquest és el motiu pel qual el robot és privat.
 
-> El bot es complementa amb un [canal privat a Telegram](https://telegram.org/faq_channels), on es comparteixen les excursions generades amb el bot. Des del canal tots els membres poden accedir a la informació de l'excursió i poden informar de si tenen intenció de participar-hi o no.
+> El robot es complementa amb un [canal privat a Telegram](https://telegram.org/faq_channels), on es comparteixen les excursions generades amb el robot. Des del canal tots els membres poden accedir a la informació de l'excursió i poden informar de si tenen intenció de participar-hi o no.
 
 General usage
 -------------
 
-Usage: @celp_bot [event name]
+Usage: @celp_bot [hike name]
 
 Installation
 ------------
@@ -44,13 +44,14 @@ $python3 bot.py
 Credits
 -------
 
-* [Create-event-bot](https://github.com/lukaville/create-event-bot) by Lukaville
+* [Create-event-bot](https://github.com/lukaville/create-event-bot) by Nickolay Chameev
 
 * Python packages:
   * [Parsedatetime](https://github.com/bear/parsedatetime) by Mike Taylor
   * [Python-telegram-bot](https://github.com/python-telegram-bot/python-telegram-bot)
   * [Requests](https://github.com/kennethreitz/requests) by Kenneth Reitz
   * [TinyDB](https://github.com/msiemens/tinydb/) by Markus Siemens
+  * [Validators](https://github.com/kvesteri/validators) by Konsta Vesterinen
 
 * To generate add.html page:
   * [Base64.js](https://github.com/dankogai/js-base64) by Dan Kogai
