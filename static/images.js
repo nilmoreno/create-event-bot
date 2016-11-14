@@ -31,14 +31,14 @@ var keywords = {
     "albera": {
         "ca": ["l'Albera"],
     },
-    "cadí": {
-        "ca": ["Cadí", "Serra del Cadí"],
+    "cadi": {
+        "ca": ["Cadí", "Serra del Cadí", "Cad\u00ED", "Serra del Cad\u00ED"],
     },
     "collserola": {
         "ca": ["Collserola"],
     },
     "costabrava": {
-        "ca": ["Costa Brava", "camí de ronda"],
+        "ca": ["Costa Brava", "camí de ronda", "cam\u00ED de ronda"],
     },
     "ebre": {
         "ca": ["Delta de l'Ebre"],
@@ -67,8 +67,8 @@ var keywords = {
     "montserrat": {
         "ca": ["Montserrat"],
     },
-    "montsià": {
-        "ca": ["Montsià"],
+    "montsia": {
+        "ca": ["Montsià", "Montsi\u00E0"],
     },
     "ordal": {
         "ca": ["Ordal"],
@@ -80,9 +80,9 @@ var keywords = {
         "ca": ["Pirineu", "Pirineus"],
     },
     "ports": {
-        "ca": ["Ports de Beseït"],
+        "ca": ["Ports de Beseït", "Ports de Bese\u00EFt"],
     },
     "santllorenc": {
-        "ca": ["Sant Llorenç de Munt", "Sant Llorenç del Munt", "Sant Llorenç-Obac", "Sant Llorenç-l'Obac", "Obac"],
+        "ca": ["Sant Llorenç de Munt", "Sant Llorenç del Munt", "Sant Llorenç-Obac", "Sant Llorenç-l'Obac", "Obac", "Sant Lloren\u00E7 de Munt", "Sant Lloren\u00E7 del Munt", "Sant Lloren\u00E7-Obac", "Sant Lloren\u00E7-l'Obac"],
     }
 };
