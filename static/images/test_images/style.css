@@ -12,6 +12,24 @@ h3 code { display:block; }
 h3 code a { color:#bfe1f1; }
 h3 code a:hover { color:#90bcd0; }
 
+.button
+{
+padding: 10px 15px 11px !important;
+font-size: 18px !important;
+background-color: #57d6c7;
+font-weight: bold;
+text-shadow: 1px 1px #57D6C7;
+color: #ffffff;
+border-radius: 5px;
+-moz-border-radius: 5px;
+-webkit-border-radius: 5px;
+border: 1px solid #57D6C7;
+cursor: pointer;
+box-shadow: 0 1px 0 rgba(255, 255, 255, 0.5) inset;
+-moz-box-shadow: 0 1px 0 rgba(255, 255, 255, 0.5) inset;
+-webkit-box-shadow: 0 1px 0 rgba(255, 255, 255, 0.5) inset;
+}
+
 /* WRAPPER */
 #wrapper { width:800px; margin:40px auto; }
 
