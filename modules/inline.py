@@ -79,7 +79,8 @@ def create_event_message(event, user):
                 message_text += ' ' + u['last_name']
             message_text += '\n'
 
-    message_text += "\n\U0001F527 Si no us funcionen els botons, si us plau notifiqueu-ho [aquí](https://telegram.me/KonfrareAlbert)."
+    # Replace user by administrator username
+    message_text += "\n\U0001F527 Si no us funcionen els botons, si us plau notifiqueu-ho [aquí](https://telegram.me/USER)."
 
     return message_text
 
