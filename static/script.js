@@ -19,6 +19,15 @@ function fillCard(event) {
     });
     };
 
+    // Create parking link
+    if (event.parking) {
+    var parking = $('#parking');
+    parking.html('<img draggable="false" class="emoji" alt="🚗" src="http://twemoji.maxcdn.com/16x16/1f697.png"> ' + event.parking + '<br>');
+    parking.click(function () {
+        window.open('http://www.openstreetmap.org/search?query=' + event.parking);
+    });
+    };
+
     // Create route link
     if (event.route) {
     var route = $('#route');

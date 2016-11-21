@@ -57,8 +57,13 @@ FIELDS = [
         'required': False
     },
     {
+        'name': 'parking',
+        'message': '\u0035\u20E3 Si per l\'excursió cal agafar el cotxe, envieu-me el *lloc d\'aparcament*, punt de sortida de l\'excursió.\n\nPodeu enviar /skip per a deixar el camp en blanc o /cancel per a cancel·lar la creació de l\'excursió.',
+        'required': False
+    },
+    {
         'name': 'route',
-        'message': '\u0035\u20E3 Envieu-me l\'*URL del mapa amb el GPX de la ruta*. Aquí també podeu enviar l\'URL d\'una pàgina de _Wikiloc_, per exemple.\n\nPodeu enviar /skip per a deixar el camp en blanc o /cancel per a cancel·lar el procés de creació de l\'excursió.',
+        'message': '\u0036\u20E3 Envieu-me l\'*URL del mapa amb el GPX de la ruta*. Aquí també podeu enviar l\'URL d\'una pàgina de _Wikiloc_, per exemple.\n\nPodeu enviar /skip per a deixar el camp en blanc o /cancel per a cancel·lar el procés de creació de l\'excursió.',
         'required': False
     },
 ]
