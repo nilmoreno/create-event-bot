@@ -11,6 +11,8 @@ h3 { font-style:italic; border-left:10px solid #eee; padding:10px 20px; margin:3
 h3 code { display:block; }
 h3 code a { color:#bfe1f1; }
 h3 code a:hover { color:#90bcd0; }
+h3 a.list { color:#bfe1f1; }
+h3 a.list:hover { color:#90bcd0; }
 
 .button
 {
@@ -39,6 +41,11 @@ box-shadow: 0 1px 0 rgba(255, 255, 255, 0.5) inset;
 #list1 ul li { display:inline; text-transform:uppercase; padding:0 10px; letter-spacing:5px; }
 #list1 ul li a { text-decoration:none; color:#eee; }
 #list1 ul li a:hover { text-decoration:underline; }
+#list1 ul li a.active { text-decoration:none; color:black; font-weight: bold; padding-top: 1px; padding-bottom: 1px; padding-left: 6px; padding-right: 6px; background-color:white;
+-webkit-border-radius: 5px;
+-moz-border-radius: 5px;
+border-radius: 5px;
+}
 
 /* LIST #2 */
 #list2 { width:320px; }
@@ -90,6 +97,6 @@ box-shadow: 0 1px 0 rgba(255, 255, 255, 0.5) inset;
 	-webkit-transform:rotate(-5deg); -webkit-box-shadow:10px 10px 20px #000000;
 	transform:rotate(-5deg); box-shadow:10px 10px 20px #000000; }
 
-#demo {width:100%}
+#demo2 {width:100%}
 
 #wrapper2 { width:800px; margin:40px auto; }
