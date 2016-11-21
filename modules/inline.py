@@ -61,6 +61,9 @@ def create_event_message(event, user):
     if 'place' in event:
         message_text += '\n' + Emoji.ROUND_PUSHPIN + ' ' + event['place'] + ' [(mapa)](http://www.openstreetmap.org/search?query=' + urllib.parse.quote(event.get("place")) + ')\n'
 
+    if 'parking' in event:
+        message_text += Emoji.AUTOMOBILE + ' ' + event['parking'] + ' [(mapa)](http://www.openstreetmap.org/search?query=' + urllib.parse.quote(event.get("parking")) + ')\n'
+
 #   if 'route' in event:
 #       message_text += '\n' + Emoji.CLOCKWISE_DOWNWARDS_AND_UPWARDS_OPEN_CIRCLE_ARROWS + ' [Mapa amb la ruta](' + event['route'] + ')'
 
@@ -75,9 +78,8 @@ def create_event_message(event, user):
             if u.get('last_name'):
                 message_text += ' ' + u['last_name']
             message_text += '\n'
-    
-    # Replace user by administrator username
-    message_text += "\n\U0001F527 Si no us funcionen els botons, si us plau notifiqueu-ho [aquí](https://telegram.me/USER)."
+
+    message_text += "\n\U0001F527 Si no us funcionen els botons, si us plau notifiqueu-ho [aquí](https://telegram.me/KonfrareAlbert)."
 
     return message_text
 
