@@ -62,6 +62,12 @@ body, html {
     cursor: pointer;
 }
 
+#parking {
+    border-bottom: 2px dotted black;
+    display: inline;
+    cursor: pointer;
+}
+
 #route {
     border-bottom: 2px dotted black;
     display: inline;

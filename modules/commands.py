@@ -57,8 +57,13 @@ FIELDS = [
         'required': False
     },
     {
+        'name': 'parking',
+        'message': '\u0035\u20E3 Si per l\'excursió cal agafar el cotxe, envieu-me el *lloc d\'aparcament*, punt de sortida de l\'excursió.\n\nPodeu enviar /skip per a deixar el camp en blanc o /cancel per a cancel·lar la creació de l\'excursió.',
+        'required': False
+    },
+    {
         'name': 'route',
-        'message': '\u0035\u20E3 Envieu-me l\'*URL del mapa amb el GPX de la ruta*. Aquí també podeu enviar l\'URL d\'una pàgina de _Wikiloc_, per exemple.\n\nPodeu enviar /skip per a deixar el camp en blanc o /cancel per a cancel·lar el procés de creació de l\'excursió.',
+        'message': '\u0036\u20E3 Envieu-me l\'*URL del mapa amb el GPX de la ruta*. Aquí també podeu enviar l\'URL d\'una pàgina de _Wikiloc_, per exemple.\n\nPodeu enviar /skip per a deixar el camp en blanc o /cancel per a cancel·lar el procés de creació de l\'excursió.',
         'required': False
     },
 ]
@@ -145,6 +150,7 @@ class CommandsModule(object):
             CommandHandler('start', self.start_command, pass_args=True),
             CommandHandler('skip', self.skip_command),
 	    CommandHandler('cancel', self.cancel_command),
+	    CommandHandler('delete', self.delete_command),
             CommandHandler('help', help_command),
             MessageHandler([Filters.text], self.message)
         ]
@@ -153,7 +159,7 @@ class CommandsModule(object):
     def start_command(self, bot, update, args):
         user_id = update.message.from_user.id
         # Replace USER_ID with your user_id number:
-        if user_id == USER_ID:
+        if user_id == 4150967 or user_id == 11116766 or user_id == 5858895 or user_id == 259027230 or user_id == 11681426:
             self.store.new_draft(user_id)
             bot.sendMessage(update.message.chat_id,parse_mode='Markdown',
                         text="Crearem un esdeveniment per a una excursió.\n\n\u0031\u20E3 El primer que heu de fer és enviar-me el *nom de l\'excursió*.\n\nSi no voleu continuar amb el procés, envieu /cancel.",
@@ -480,6 +486,16 @@ class CommandsModule(object):
             update.message.chat_id,
             text="S'ha creat l'excursió",
             reply_markup=InlineKeyboardMarkup(inline_keyboard=keyboard)
+        )
+
+    def delete_command(self, bot, update):
+        user_id = update.message.from_user.id
+        eventlist = self.store.get_events(user_id)
+
+        bot.sendMessage(
+            update.message.chat_id,
+            text="\u26A0\uFE0F No hi ha res a cancel·lar.\nAquesta comanda només funciona quan s'ha iniciat la creació d'una excursió.",
+            reply_markup=ReplyKeyboardHide()
         )
 
     def get_handlers(self):
