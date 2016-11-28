@@ -12,6 +12,7 @@ from telegram.ext import InlineQueryHandler, CallbackQueryHandler
 from store import TinyDBStore
 
 
+
 def create_event_payload(event):
     event_string = json.dumps(event)
     eight_bit_string = base64.b64encode(event_string.encode('ascii'))
@@ -26,6 +27,31 @@ def create_keyboard(event, user):
         )
     ]
 
+    button2 = [
+        InlineKeyboardButton(
+            text="\U0001F468\U0001F3FB",
+            callback_data='goman_' + str(event.eid)
+        ),
+        InlineKeyboardButton(
+            text="\U0001F469\U0001F3FB",
+            callback_data='gowoman_' + str(event.eid)
+        ),
+        InlineKeyboardButton(
+            text="\U0001F466\U0001F3FC",
+            callback_data='goboy_' + str(event.eid)
+        ),
+        InlineKeyboardButton(
+            text="\U0001F467\U0001F3FC",
+            callback_data='gogirl_' + str(event.eid)
+        )
+    ]
+
+    if event.get('parking'):
+        button2.append(InlineKeyboardButton(
+            text="\U0001F697",
+            callback_data='gocar_' + str(event.eid)
+        ))
+
     buttons = [
         InlineKeyboardButton(
             text="\U0001F4C6 Calendari",
@@ -39,7 +65,7 @@ def create_keyboard(event, user):
             url=event.get('route')
         ))
 
-    return [button, buttons, []]
+    return [button, button2, buttons, []]
 
 
 def format_date(param):
@@ -71,12 +97,60 @@ def create_event_message(event, user):
         message_text += '\nHi aniran: \n'
         for u in event['users']:
             message_text += '\U0001F449\U0001F3FC '
-            if u.get('username'):
-                message_text += '@' + u['username'] + ' - '
-
+            
             message_text += u['first_name']
             if u.get('last_name'):
                 message_text += ' ' + u['last_name']
+            if u.get('username'):
+                message_text += ' [\U0001F4AC](https://telegram.me/' + u['username'] + ')'
+            message_text += ' '
+
+            if u.get('man') and u['man'] == 1:
+                message_text += '\U0001F468\U0001F3FB'
+            if u.get('man') and u['man'] == 2:
+                message_text += '\U0001F468\U0001F3FB\U0001F468\U0001F3FB'
+            if u.get('man') and u['man'] == 3:
+                message_text += '\U0001F468\U0001F3FB\U0001F468\U0001F3FB\U0001F468\U0001F3FB'
+            if u.get('man') and u['man'] == 4:
+                message_text += '\U0001F468\U0001F3FB\U0001F468\U0001F3FB\U0001F468\U0001F3FB\U0001F468\U0001F3FB'
+            if u.get('man') and u['man'] == 5:
+                message_text += '\U0001F468\U0001F3FB\U0001F468\U0001F3FB\U0001F468\U0001F3FB\U0001F468\U0001F3FB\U0001F468\U0001F3FB'
+            if u.get('woman') and u['woman'] == 1:
+                message_text += '\U0001F469\U0001F3FB'
+            if u.get('woman') and u['woman'] == 2:
+                message_text += '\U0001F469\U0001F3FB\U0001F469\U0001F3FB'
+            if u.get('woman') and u['woman'] == 3:
+                message_text += '\U0001F469\U0001F3FB\U0001F469\U0001F3FB\U0001F469\U0001F3FB'
+            if u.get('woman') and u['woman'] == 4:
+                message_text += '\U0001F469\U0001F3FB\U0001F469\U0001F3FB\U0001F469\U0001F3FB\U0001F469\U0001F3FB'
+            if u.get('woman') and u['woman'] == 5:
+                message_text += '\U0001F469\U0001F3FB\U0001F469\U0001F3FB\U0001F469\U0001F3FB\U0001F469\U0001F3FB\U0001F469\U0001F3FB'
+            if u.get('boy') and u['boy'] == 1:
+                message_text += '\U0001F466\U0001F3FC'
+            if u.get('boy') and u['boy'] == 2:
+                message_text += '\U0001F466\U0001F3FC\U0001F466\U0001F3FC'
+            if u.get('boy') and u['boy'] == 3:
+                message_text += '\U0001F466\U0001F3FC\U0001F466\U0001F3FC\U0001F466\U0001F3FC'
+            if u.get('boy') and u['boy'] == 4:
+                message_text += '\U0001F466\U0001F3FC\U0001F466\U0001F3FC\U0001F466\U0001F3FC\U0001F466\U0001F3FC'
+            if u.get('boy') and u['boy'] == 5:
+                message_text += '\U0001F466\U0001F3FC\U0001F466\U0001F3FC\U0001F466\U0001F3FC\U0001F466\U0001F3FC\U0001F466\U0001F3FC'
+            if u.get('girl') and u['girl'] == 1:
+                message_text += '\U0001F467\U0001F3FC'
+            if u.get('girl') and u['girl'] == 2:
+                message_text += '\U0001F467\U0001F3FC\U0001F467\U0001F3FC'
+            if u.get('girl') and u['girl'] == 3:
+                message_text += '\U0001F467\U0001F3FC\U0001F467\U0001F3FC\U0001F467\U0001F3FC'
+            if u.get('girl') and u['girl'] == 4:
+                message_text += '\U0001F467\U0001F3FC\U0001F467\U0001F3FC\U0001F467\U0001F3FC\U0001F467\U0001F3FC'
+            if u.get('girl') and u['girl'] == 5:
+                message_text += '\U0001F467\U0001F3FC\U0001F467\U0001F3FC\U0001F467\U0001F3FC\U0001F467\U0001F3FC\U0001F467\U0001F3FC'
+            if u.get('car') and u['car'] == 1:
+                message_text += '\U0001F697'
+            if u.get('car') and u['car'] == 2:
+                message_text += '\U0001F697\U0001F697'
+            if u.get('car') and u['car'] == 3:
+                message_text += '\U0001F697\U0001F697\U0001F697'
             message_text += '\n'
 
     # Replace user by administrator username
@@ -101,8 +175,88 @@ class InlineModule(object):
         (command, event_id) = tuple(data.split('_'))
         event = self.store.get_event(event_id)
 
+        if not event.get('users'):
+            event['users'] = []
+
+        if any(u['id'] == user['id'] for u in event['users']):
+              if any(u['id'] == user['id'] and u['man'] == 0 for u in event['users']):
+                    user.update({'man': 0})
+              elif any(u['id'] == user['id'] and u['man'] == 1 for u in event['users']):
+                    user.update({'man': 1})
+              elif any(u['id'] == user['id'] and u['man'] == 2 for u in event['users']):
+                    user.update({'man': 2})
+              elif any(u['id'] == user['id'] and u['man'] == 3 for u in event['users']):
+                    user.update({'man': 3})
+              elif any(u['id'] == user['id'] and u['man'] == 4 for u in event['users']):
+                    user.update({'man': 4})
+              elif any(u['id'] == user['id'] and u['man'] == 5 for u in event['users']):
+                    user.update({'man': 5})
+
+              if any(u['id'] == user['id'] and u['woman'] == 0 for u in event['users']):
+                    user.update({'woman': 0})
+              elif any(u['id'] == user['id'] and u['woman'] == 1 for u in event['users']):
+                    user.update({'woman': 1})
+              elif any(u['id'] == user['id'] and u['woman'] == 2 for u in event['users']):
+                    user.update({'woman': 2})
+              elif any(u['id'] == user['id'] and u['woman'] == 3 for u in event['users']):
+                    user.update({'woman': 3})
+              elif any(u['id'] == user['id'] and u['woman'] == 4 for u in event['users']):
+                    user.update({'woman': 4})
+              elif any(u['id'] == user['id'] and u['woman'] == 5 for u in event['users']):
+                    user.update({'woman': 5})
+
+              if any(u['id'] == user['id'] and u['boy'] == 0 for u in event['users']):
+                    user.update({'boy': 0})
+              elif any(u['id'] == user['id'] and u['boy'] == 1 for u in event['users']):
+                    user.update({'boy': 1})
+              elif any(u['id'] == user['id'] and u['boy'] == 2 for u in event['users']):
+                    user.update({'boy': 2})
+              elif any(u['id'] == user['id'] and u['boy'] == 3 for u in event['users']):
+                    user.update({'boy': 3})
+              elif any(u['id'] == user['id'] and u['boy'] == 4 for u in event['users']):
+                    user.update({'boy': 4})
+              elif any(u['id'] == user['id'] and u['boy'] == 5 for u in event['users']):
+                    user.update({'boy': 5})
+
+              if any(u['id'] == user['id'] and u['girl'] == 0 for u in event['users']):
+                    user.update({'girl': 0})
+              elif any(u['id'] == user['id'] and u['girl'] == 1 for u in event['users']):
+                    user.update({'girl': 1})
+              elif any(u['id'] == user['id'] and u['girl'] == 2 for u in event['users']):
+                    user.update({'girl': 2})
+              elif any(u['id'] == user['id'] and u['girl'] == 3 for u in event['users']):
+                    user.update({'girl': 3})
+              elif any(u['id'] == user['id'] and u['girl'] == 4 for u in event['users']):
+                    user.update({'girl': 4})
+              elif any(u['id'] == user['id'] and u['girl'] == 5 for u in event['users']):
+                    user.update({'girl': 5})
+
+              if any(u['id'] == user['id'] and u['car'] == 0 for u in event['users']):
+                    user.update({'car': 0})
+              elif any(u['id'] == user['id'] and u['car'] == 1 for u in event['users']):
+                    user.update({'car': 1})
+              elif any(u['id'] == user['id'] and u['car'] == 2 for u in event['users']):
+                    user.update({'car': 2})
+              elif any(u['id'] == user['id'] and u['car'] == 3 for u in event['users']):
+                    user.update({'car': 3})
+
         if command == 'go':
             event = self.toggle_user(event, user)
+
+        if command == 'goman':
+            event = self.toggle_man(event, user)
+
+        if command == 'gowoman':
+            event = self.toggle_woman(event, user)
+
+        if command == 'goboy':
+            event = self.toggle_boy(event, user)
+
+        if command == 'gogirl':
+            event = self.toggle_girl(event, user)
+
+        if command == 'gocar':
+            event = self.toggle_car(event, user)
 
         bot.editMessageText(text=create_event_message(event, user),
                             inline_message_id=query.inline_message_id,
@@ -117,7 +271,174 @@ class InlineModule(object):
         if any(u['id'] == user['id'] for u in event['users']):
             event['users'].remove(user)
         else:
+            user.update({'man': 0})
+            user.update({'woman': 0})
+            user.update({'boy': 0})
+            user.update({'girl': 0})
+            user.update({'car': 0})
             event['users'].append(user)
+
+        self.store.update_event(event)
+        return event
+
+    def toggle_man(self, event, user):
+        if not event.get('users'):
+            event['users'] = []
+
+        if any(u['id'] == user['id'] and u['man'] == 0 for u in event['users']):
+               event['users'].remove(user)
+               user.update({'man': 1})
+               event['users'].append(user)
+        elif any(u['id'] == user['id'] and u['man'] == 1 for u in event['users']):
+               event['users'].remove(user)
+               user.update({'man': 2})
+               event['users'].append(user)
+        elif any(u['id'] == user['id'] and u['man'] == 2 for u in event['users']):
+               event['users'].remove(user)
+               user.update({'man': 3})
+               event['users'].append(user)
+        elif any(u['id'] == user['id'] and u['man'] == 3 for u in event['users']):
+               event['users'].remove(user)
+               user.update({'man': 4})
+               event['users'].append(user)
+        elif any(u['id'] == user['id'] and u['man'] == 4 for u in event['users']):
+               event['users'].remove(user)
+               user.update({'man': 5})
+               event['users'].append(user)
+        elif any(u['id'] == user['id'] and u['man'] == 5 for u in event['users']):
+               event['users'].remove(user)
+               user.update({'man': 0})
+               event['users'].append(user)
+        else:
+               not_user = yes
+
+        self.store.update_event(event)
+        return event
+
+    def toggle_woman(self, event, user):
+        if not event.get('users'):
+            event['users'] = []
+
+        if any(u['id'] == user['id'] and u['woman'] == 0 for u in event['users']):
+               event['users'].remove(user)
+               user.update({'woman': 1})
+               event['users'].append(user)
+        elif any(u['id'] == user['id'] and u['woman'] == 1 for u in event['users']):
+               event['users'].remove(user)
+               user.update({'woman': 2})
+               event['users'].append(user)
+        elif any(u['id'] == user['id'] and u['woman'] == 2 for u in event['users']):
+               event['users'].remove(user)
+               user.update({'woman': 3})
+               event['users'].append(user)
+        elif any(u['id'] == user['id'] and u['woman'] == 3 for u in event['users']):
+               event['users'].remove(user)
+               user.update({'woman': 4})
+               event['users'].append(user)
+        elif any(u['id'] == user['id'] and u['woman'] == 4 for u in event['users']):
+               event['users'].remove(user)
+               user.update({'woman': 5})
+               event['users'].append(user)
+        elif any(u['id'] == user['id'] and u['woman'] == 5 for u in event['users']):
+               event['users'].remove(user)
+               user.update({'woman': 0})
+               event['users'].append(user)
+        else:
+               not_user = yes
+
+        self.store.update_event(event)
+        return event
+
+    def toggle_boy(self, event, user):
+        if not event.get('users'):
+            event['users'] = []
+
+        if any(u['id'] == user['id'] and u['boy'] == 0 for u in event['users']):
+               event['users'].remove(user)
+               user.update({'boy': 1})
+               event['users'].append(user)
+        elif any(u['id'] == user['id'] and u['boy'] == 1 for u in event['users']):
+               event['users'].remove(user)
+               user.update({'boy': 2})
+               event['users'].append(user)
+        elif any(u['id'] == user['id'] and u['boy'] == 2 for u in event['users']):
+               event['users'].remove(user)
+               user.update({'boy': 3})
+               event['users'].append(user)
+        elif any(u['id'] == user['id'] and u['boy'] == 3 for u in event['users']):
+               event['users'].remove(user)
+               user.update({'boy': 4})
+               event['users'].append(user)
+        elif any(u['id'] == user['id'] and u['boy'] == 4 for u in event['users']):
+               event['users'].remove(user)
+               user.update({'boy': 5})
+               event['users'].append(user)
+        elif any(u['id'] == user['id'] and u['boy'] == 5 for u in event['users']):
+               event['users'].remove(user)
+               user.update({'boy': 0})
+               event['users'].append(user)
+        else:
+               not_user = yes
+
+        self.store.update_event(event)
+        return event
+
+    def toggle_girl(self, event, user):
+        if not event.get('users'):
+            event['users'] = []
+
+        if any(u['id'] == user['id'] and u['girl'] == 0 for u in event['users']):
+               event['users'].remove(user)
+               user.update({'girl': 1})
+               event['users'].append(user)
+        elif any(u['id'] == user['id'] and u['girl'] == 1 for u in event['users']):
+               event['users'].remove(user)
+               user.update({'girl': 2})
+               event['users'].append(user)
+        elif any(u['id'] == user['id'] and u['girl'] == 2 for u in event['users']):
+               event['users'].remove(user)
+               user.update({'girl': 3})
+               event['users'].append(user)
+        elif any(u['id'] == user['id'] and u['girl'] == 3 for u in event['users']):
+               event['users'].remove(user)
+               user.update({'girl': 4})
+               event['users'].append(user)
+        elif any(u['id'] == user['id'] and u['girl'] == 4 for u in event['users']):
+               event['users'].remove(user)
+               user.update({'girl': 5})
+               event['users'].append(user)
+        elif any(u['id'] == user['id'] and u['girl'] == 5 for u in event['users']):
+               event['users'].remove(user)
+               user.update({'girl': 0})
+               event['users'].append(user)
+        else:
+               not_user = yes
+
+        self.store.update_event(event)
+        return event
+
+    def toggle_car(self, event, user):
+        if not event.get('users'):
+            event['users'] = []
+
+        if any(u['id'] == user['id'] and u['car'] == 0 for u in event['users']):
+               event['users'].remove(user)
+               user.update({'car': 1})
+               event['users'].append(user)
+        elif any(u['id'] == user['id'] and u['car'] == 1 for u in event['users']):
+               event['users'].remove(user)
+               user.update({'car': 2})
+               event['users'].append(user)
+        elif any(u['id'] == user['id'] and u['car'] == 2 for u in event['users']):
+               event['users'].remove(user)
+               user.update({'car': 3})
+               event['users'].append(user)
+        elif any(u['id'] == user['id'] and u['car'] == 3 for u in event['users']):
+               event['users'].remove(user)
+               user.update({'car': 0})
+               event['users'].append(user)
+        else:
+               not_user = yes
 
         self.store.update_event(event)
         return event
