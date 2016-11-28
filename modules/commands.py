@@ -141,8 +141,9 @@ def parse_fields(field, value):
 
 
 def help_command(bot, update):
-    bot.sendMessage(update.message.chat_id, text='Aquest bot és privat i només alguns usuaris poden crear esdeveniments per a excursions.')
-
+    bot.sendMessage(update.message.chat_id, text='Aquest bot és privat i només alguns usuaris poden crear esdeveniments per a excursions. Si quan envieu /start rebeu un missatge amb el vostre \U0001F194 vol dir que no teniu permisos.\n\nDe totes maneres un enviaré un enllaç amb les instruccions d\'ús del bot per a usuaris sense permisos que interactuen amb el bot a partir de missatges generats pel bot:')
+    bot.sendMessage(update.message.chat_id, text='http://telegra.ph/Instruccions-d%c3%bas-CELP-familiar-11-28')
+    bot.sendMessage(update.message.chat_id, text='Us pot ser útil també si genereu excursions i voleu explicar-ne el funcionament \U0001F609')
 
 class CommandsModule(object):
     def __init__(self):
@@ -150,6 +151,7 @@ class CommandsModule(object):
             CommandHandler('start', self.start_command, pass_args=True),
             CommandHandler('skip', self.skip_command),
 	    CommandHandler('cancel', self.cancel_command),
+	    CommandHandler('delete', self.delete_command),
             CommandHandler('help', help_command),
             MessageHandler([Filters.text], self.message)
         ]
@@ -485,6 +487,16 @@ class CommandsModule(object):
             update.message.chat_id,
             text="S'ha creat l'excursió",
             reply_markup=InlineKeyboardMarkup(inline_keyboard=keyboard)
+        )
+
+    def delete_command(self, bot, update):
+        user_id = update.message.from_user.id
+        eventlist = self.store.get_events(user_id)
+
+        bot.sendMessage(
+            update.message.chat_id,
+            text="\u26A0\uFE0F No hi ha res a cancel·lar.\nAquesta comanda només funciona quan s'ha iniciat la creació d'una excursió.",
+            reply_markup=ReplyKeyboardHide()
         )
 
     def get_handlers(self):
