@@ -151,7 +151,6 @@ class CommandsModule(object):
             CommandHandler('start', self.start_command, pass_args=True),
             CommandHandler('skip', self.skip_command),
 	    CommandHandler('cancel', self.cancel_command),
-	    CommandHandler('delete', self.delete_command),
             CommandHandler('help', help_command),
             MessageHandler([Filters.text], self.message)
         ]
@@ -487,16 +486,6 @@ class CommandsModule(object):
             update.message.chat_id,
             text="S'ha creat l'excursió",
             reply_markup=InlineKeyboardMarkup(inline_keyboard=keyboard)
-        )
-
-    def delete_command(self, bot, update):
-        user_id = update.message.from_user.id
-        eventlist = self.store.get_events(user_id)
-
-        bot.sendMessage(
-            update.message.chat_id,
-            text="\u26A0\uFE0F No hi ha res a cancel·lar.\nAquesta comanda només funciona quan s'ha iniciat la creació d'una excursió.",
-            reply_markup=ReplyKeyboardHide()
         )
 
     def get_handlers(self):
