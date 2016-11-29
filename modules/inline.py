@@ -96,7 +96,8 @@ def create_event_message(event, user):
     if 'users' in event and len(event['users']) > 0:
         message_text += '\nHi aniran: \n'
         for u in event['users']:
-            message_text += '\U0001F449\U0001F3FC '
+            #message_text += '\U0001F449\U0001F3FC '
+            message_text += '\u27A9 '
             
             message_text += u['first_name']
             if u.get('last_name'):
