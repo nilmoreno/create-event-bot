@@ -141,8 +141,9 @@ def parse_fields(field, value):
 
 
 def help_command(bot, update):
-    bot.sendMessage(update.message.chat_id, text='Aquest bot és privat i només alguns usuaris poden crear esdeveniments per a excursions.')
-
+    bot.sendMessage(update.message.chat_id, text='Aquest bot és privat i només alguns usuaris poden crear esdeveniments per a excursions. Si quan envieu /start rebeu un missatge amb el vostre \U0001F194 vol dir que no teniu permisos.\n\nDe totes maneres un enviaré un enllaç amb les instruccions d\'ús del bot per a usuaris sense permisos que interactuen amb el bot a partir de missatges generats pel bot:')
+    bot.sendMessage(update.message.chat_id, text='http://telegra.ph/Instruccions-d%c3%bas-CELP-familiar-11-28')
+    bot.sendMessage(update.message.chat_id, text='Us pot ser útil també si genereu excursions i voleu explicar-ne el funcionament \U0001F609')
 
 class CommandsModule(object):
     def __init__(self):

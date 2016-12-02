@@ -96,7 +96,8 @@ def create_event_message(event, user):
     if 'users' in event and len(event['users']) > 0:
         message_text += '\nHi aniran: \n'
         for u in event['users']:
-            message_text += '\U0001F449\U0001F3FC '
+            #message_text += '\U0001F449\U0001F3FC '
+            message_text += '\u27A9 '
             
             message_text += u['first_name']
             if u.get('last_name'):
@@ -152,9 +153,8 @@ def create_event_message(event, user):
             if u.get('car') and u['car'] == 3:
                 message_text += '\U0001F697\U0001F697\U0001F697'
             message_text += '\n'
-
-    # Replace user by administrator username
-    message_text += "\n\U0001F527 Si no us funcionen els botons, si us plau notifiqueu-ho [aquí](https://telegram.me/USER)."
+            
+    message_text += "\n\U0001F527 Instruccions d'ús dels botons: [aquí](http://telegra.ph/Instruccions-d%c3%bas-CELP-familiar-11-28)."
 
     return message_text
 
