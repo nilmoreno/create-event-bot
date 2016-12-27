@@ -11,6 +11,7 @@ from telegram.ext import InlineQueryHandler, CallbackQueryHandler
 
 from store import TinyDBStore
 
+from config import params
 
 
 def create_event_payload(event):
