@@ -265,6 +265,25 @@ class InlineModule(object):
                             parse_mode=ParseMode.MARKDOWN,
 			    disable_web_page_preview=True)
 
+        if data.startswith( 'goman' ):
+            callback_query_id=query.id
+            bot.answerCallbackQuery(callback_query_id=query.id, text="Heu canviat el nombre d'homes adults que assistiran a l'excursió")
+        elif data.startswith( 'gowoman' ):
+            callback_query_id=query.id
+            bot.answerCallbackQuery(callback_query_id=query.id, text="Heu canviat el nombre de dones adultes que assistiran a l'excursió")
+        elif data.startswith( 'goboy' ):
+            callback_query_id=query.id
+            bot.answerCallbackQuery(callback_query_id=query.id, text="Heu canviat el nombre de nens que assistiran a l'excursió")
+        elif data.startswith( 'gogirl' ):
+            callback_query_id=query.id
+            bot.answerCallbackQuery(callback_query_id=query.id, text="Heu canviat el nombre de nenes que assistiran a l'excursió")
+        elif data.startswith( 'gocar' ):
+            callback_query_id=query.id
+            bot.answerCallbackQuery(callback_query_id=query.id, text="Heu canviat el nombre de cotxes per a l'excursió")
+        elif data.startswith( 'go' ):
+            callback_query_id=query.id
+            bot.answerCallbackQuery(callback_query_id=query.id, text="Heu canviat la vostra assistència a l'excursió")
+
     def toggle_user(self, event, user):
         if not event.get('users'):
             event['users'] = []
