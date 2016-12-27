@@ -10,6 +10,8 @@ from validators import url, ValidationFailure
 
 from store import TinyDBStore
 
+from config import params, allowed_users
+
 FIELDS = [
     {
         'name': 'name',
@@ -152,14 +154,13 @@ class CommandsModule(object):
             CommandHandler('skip', self.skip_command),
 	    CommandHandler('cancel', self.cancel_command),
             CommandHandler('help', help_command),
-            MessageHandler([Filters.text], self.message)
+            MessageHandler((Filters.text), self.message)
         ]
         self.store = TinyDBStore()
 
     def start_command(self, bot, update, args):
         user_id = update.message.from_user.id
-        # Replace USER_ID with your user_id number:
-        if user_id == USER_ID:
+        if str(user_id) in allowed_users.values():
             self.store.new_draft(user_id)
             bot.sendMessage(update.message.chat_id,parse_mode='Markdown',
                         text="Crearem un esdeveniment per a una excursió.\n\n\u0031\u20E3 El primer que heu de fer és enviar-me el *nom de l\'excursió*.\n\nSi no voleu continuar amb el procés, envieu /cancel.",

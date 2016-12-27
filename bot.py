@@ -11,6 +11,8 @@ from telegram.ext import Updater
 from modules.commands import CommandsModule
 from modules.inline import InlineModule
 
+from config import params
+
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
                     level=logging.INFO)
 
@@ -28,7 +30,7 @@ def load_modules(dispatcher, modules):
 
 
 def main():
-    updater = Updater('TELEGRAM_TOKEN')
+    updater = Updater(params['token'])
 
     dp = updater.dispatcher
 
