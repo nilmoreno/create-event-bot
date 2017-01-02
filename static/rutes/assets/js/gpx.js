@@ -50,9 +50,10 @@ var _DEFAULT_MARKER_OPTS = {
   iconAnchor: [16, 45],
   shadowAnchor: [16, 47]
 };
-var _DEFAULT_POLYLINE_OPTS = {
-  color: 'blue'
-};
+//var _DEFAULT_POLYLINE_OPTS = {
+//  color: 'black',
+//  opacity: '100'
+//};
 L.GPX = L.FeatureGroup.extend({
   initialize: function(gpx, options) {
     options.max_point_interval = options.max_point_interval || _MAX_POINT_INTERVAL_MS;
