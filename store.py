@@ -47,8 +47,8 @@ class TinyDBStore(object):
 
     def get_events(self, user_id, name=None):
         if name:
-            return self.events_db.search((Query().user_id == user_id) & (Query().name.test(lambda v: name in v)))
-        return self.events_db.search(Query().user_id == user_id)
+            return self.events_db.search(((Query().user_id == user_id) & (Query().name.test(lambda v: name in v))) | (Query().invite == 'yes'))
+        return self.events_db.search((Query().user_id == user_id) | (Query().invite == 'yes'))
 
     def get_event(self, event_id):
         return self.events_db.get(eid=int(event_id))
