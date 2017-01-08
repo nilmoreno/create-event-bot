@@ -3,14 +3,17 @@ import base64
 import datetime
 import locale
 import json
+import csv
 from six.moves import urllib
+from datetime import datetime
 
 from telegram import InlineQueryResultArticle, ParseMode, \
     InputTextMessageContent, InlineKeyboardButton, InlineKeyboardMarkup, Emoji
-from telegram.ext import InlineQueryHandler, CallbackQueryHandler
+from telegram.ext import InlineQueryHandler, CallbackQueryHandler, ChosenInlineResultHandler
 
 from store import TinyDBStore
 
+from config import params, links, other_users
 
 
 def create_event_payload(event):
@@ -20,52 +23,62 @@ def create_event_payload(event):
 
 
 def create_keyboard(event, user):
-    button = [
-        InlineKeyboardButton(
-            text="\U0001F465 Afegeix-m'hi / treu-me'n",
-            callback_data='go_' + str(event.eid)
-        )
-    ]
+    if event.get('invite'):
+        button = [
+            InlineKeyboardButton(
+                text="\U0001F4E2 Entreu a CELP familiar",
+                url=links['channel']
+            )
+        ]
+        return [button, []]
 
-    button2 = [
-        InlineKeyboardButton(
-            text="\U0001F468\U0001F3FB",
-            callback_data='goman_' + str(event.eid)
-        ),
-        InlineKeyboardButton(
-            text="\U0001F469\U0001F3FB",
-            callback_data='gowoman_' + str(event.eid)
-        ),
-        InlineKeyboardButton(
-            text="\U0001F466\U0001F3FC",
-            callback_data='goboy_' + str(event.eid)
-        ),
-        InlineKeyboardButton(
-            text="\U0001F467\U0001F3FC",
-            callback_data='gogirl_' + str(event.eid)
-        )
-    ]
+    else:
+        button = [
+            InlineKeyboardButton(
+                text="\U0001F465 Afegeix-m'hi / treu-me'n",
+                callback_data='go_' + str(event.eid)
+            )
+        ]
 
-    if event.get('parking'):
-        button2.append(InlineKeyboardButton(
-            text="\U0001F697",
-            callback_data='gocar_' + str(event.eid)
-        ))
+        button2 = [
+            InlineKeyboardButton(
+                text="\U0001F468\U0001F3FB",
+                callback_data='goman_' + str(event.eid)
+            ),
+            InlineKeyboardButton(
+                text="\U0001F469\U0001F3FB",
+                callback_data='gowoman_' + str(event.eid)
+            ),
+            InlineKeyboardButton(
+                text="\U0001F466\U0001F3FC",
+                callback_data='goboy_' + str(event.eid)
+            ),
+            InlineKeyboardButton(
+                text="\U0001F467\U0001F3FC",
+                callback_data='gogirl_' + str(event.eid)
+            )
+        ]
 
-    buttons = [
-        InlineKeyboardButton(
-            text="\U0001F4C6 Calendari",
-            url='http://www.konfraria.org/calendari_celp/add.html#' + create_event_payload(event)
-        )
-    ]
+        if event.get('parking'):
+            button2.append(InlineKeyboardButton(
+                text="\U0001F697",
+                callback_data='gocar_' + str(event.eid)
+            ))
 
-    if event.get('route'):
-        buttons.append(InlineKeyboardButton(
-            text="\U0001F5FA Ruta",
-            url=event.get('route')
-        ))
+        buttons = [
+            InlineKeyboardButton(
+                text="\U0001F4C6 Calendari",
+                url='http://www.konfraria.org/calendari_celp/add.html#' + create_event_payload(event)
+            )
+        ]
 
-    return [button, button2, buttons, []]
+        if event.get('route'):
+            buttons.append(InlineKeyboardButton(
+                text="\U0001F5FA Ruta",
+                url=event.get('route')
+            ))
+
+        return [button, button2, buttons, []]
 
 
 def format_date(param):
@@ -76,96 +89,142 @@ def format_date(param):
 
 
 def create_event_message(event, user):
-    message_text = "*{name}*\n{date}\n".format(
-        name=event['name'],
-        date=format_date(event['date'])
-    )
+    if event['invite'] == 'yes':
+        user_f = user['first_name']
+        user_ln = user['last_name']
+        user_u = user['username']
+        if user_ln != "" and user_u != "":
+           user_d= user_f + " " + user_ln + "* (podeu contactar-hi amb @" + user_u + ")"
+        elif user_ln == "" and user_u != "":
+           user_d= user_f + "* (podeu contactar-hi amb @" + user_u + ")" 
+        elif user_ln != "" and user_u == "":
+           user_d= user_f + " " + user_ln + "*"
+        elif user_ln == "" and user_u == "":
+           user_d= user_f + "*"
+        message_text = 'Missatge del robot del CELP\n\n\u2709\uFE0F *' +user_d + " us convida al canal privat *«CELP familiar»*.\n\nPer entrar-hi premeu el botó \U0001F4E2 _Entreu a CELP familiar_, i a continuació seleccioneu *«JOIN»* o bé *«AFEGEIX-M'HI»*.\n\nSi us afegiu a aquest canal privat només rebreu informació de les excursions i tindreu l'opció d'apuntar-vos-hi, però això no és un grup, per tant ningú hi pot escriure."
+        return message_text
+    else:
+        message_text = "*{name}*\n{date}\n".format(
+            name=event['name'],
+            date=format_date(event['date'])
+        )
 
-    if 'description' in event:
-        message_text += '\n_' + event['description'] + '_\n'
+        if 'description' in event:
+            message_text += '\n_' + event['description'] + '_\n'
 
-    if 'place' in event:
-        message_text += '\n' + Emoji.ROUND_PUSHPIN + ' ' + event['place'] + ' [(mapa)](http://www.openstreetmap.org/search?query=' + urllib.parse.quote(event.get("place")) + ')\n'
+        if 'place' in event:
+            message_text += '\n' + Emoji.ROUND_PUSHPIN + ' ' + event['place'] + ' [(mapa)](http://www.openstreetmap.org/search?query=' + urllib.parse.quote(event.get("place")) + ')\n'
 
-    if 'parking' in event:
-        message_text += Emoji.AUTOMOBILE + ' ' + event['parking'] + ' [(mapa)](http://www.openstreetmap.org/search?query=' + urllib.parse.quote(event.get("parking")) + ')\n'
+        if 'parking' in event:
+            message_text += Emoji.AUTOMOBILE + ' ' + event['parking'] + ' [(mapa)](http://www.openstreetmap.org/search?query=' + urllib.parse.quote(event.get("parking")) + ')\n'
 
-#   if 'route' in event:
-#       message_text += '\n' + Emoji.CLOCKWISE_DOWNWARDS_AND_UPWARDS_OPEN_CIRCLE_ARROWS + ' [Mapa amb la ruta](' + event['route'] + ')'
+    #   if 'route' in event:
+    #       message_text += '\n' + Emoji.CLOCKWISE_DOWNWARDS_AND_UPWARDS_OPEN_CIRCLE_ARROWS + ' [Mapa amb la ruta](' + event['route'] + ')'
 
-    if 'users' in event and len(event['users']) > 0:
-        message_text += '\nHi aniran: \n'
-        for u in event['users']:
-            #message_text += '\U0001F449\U0001F3FC '
-            message_text += '\u27A9 '
+        if 'users' in event and len(event['users']) > 0:
+            message_text += '\nHi aniran: \n'
+            for u in event['users']:
+                #message_text += '\U0001F449\U0001F3FC '
+                message_text += '\u27A9 '
+        
+                message_text += u['first_name']
+                if u.get('last_name'):
+                    message_text += ' ' + u['last_name']
+                if u.get('username'):
+                    message_text += ' [\U0001F4AC](https://telegram.me/' + u['username'] + ')'
+                message_text += ' '
+
+                if u.get('man') and u['man'] == 1:
+                    message_text += '\U0001F468\U0001F3FB'
+                if u.get('man') and u['man'] == 2:
+                    message_text += '\U0001F468\U0001F3FB\U0001F468\U0001F3FB'
+                if u.get('man') and u['man'] == 3:
+                    message_text += '\U0001F468\U0001F3FB\U0001F468\U0001F3FB\U0001F468\U0001F3FB'
+                if u.get('man') and u['man'] == 4:
+                    message_text += '\U0001F468\U0001F3FB\U0001F468\U0001F3FB\U0001F468\U0001F3FB\U0001F468\U0001F3FB'
+                if u.get('man') and u['man'] == 5:
+                    message_text += '\U0001F468\U0001F3FB\U0001F468\U0001F3FB\U0001F468\U0001F3FB\U0001F468    \U0001F3FB\U0001F468\U0001F3FB'
+                if u.get('woman') and u['woman'] == 1:
+                    message_text += '\U0001F469\U0001F3FB'
+                if u.get('woman') and u['woman'] == 2:
+                    message_text += '\U0001F469\U0001F3FB\U0001F469\U0001F3FB'
+                if u.get('woman') and u['woman'] == 3:
+                    message_text += '\U0001F469\U0001F3FB\U0001F469\U0001F3FB\U0001F469\U0001F3FB'
+                if u.get('woman') and u['woman'] == 4:
+                    message_text += '\U0001F469\U0001F3FB\U0001F469\U0001F3FB\U0001F469\U0001F3FB\U0001F469\U0001F3FB'
+                if u.get('woman') and u['woman'] == 5:
+                    message_text += '\U0001F469\U0001F3FB\U0001F469\U0001F3FB\U0001F469\U0001F3FB\U0001F469\U0001F3FB\U0001F469\U0001F3FB'
+                if u.get('boy') and u['boy'] == 1:
+                    message_text += '\U0001F466\U0001F3FC'
+                if u.get('boy') and u['boy'] == 2:
+                    message_text += '\U0001F466\U0001F3FC\U0001F466\U0001F3FC'
+                if u.get('boy') and u['boy'] == 3:
+                    message_text += '\U0001F466\U0001F3FC\U0001F466\U0001F3FC\U0001F466\U0001F3FC'
+                if u.get('boy') and u['boy'] == 4:
+                    message_text += '\U0001F466\U0001F3FC\U0001F466\U0001F3FC\U0001F466\U0001F3FC\U0001F466\U0001F3FC'
+                if u.get('boy') and u['boy'] == 5:
+                    message_text += '\U0001F466\U0001F3FC\U0001F466\U0001F3FC\U0001F466\U0001F3FC\U0001F466\U0001F3FC\U0001F466\U0001F3FC'
+                if u.get('girl') and u['girl'] == 1:
+                    message_text += '\U0001F467\U0001F3FC'
+                if u.get('girl') and u['girl'] == 2:
+                    message_text += '\U0001F467\U0001F3FC\U0001F467\U0001F3FC'
+                if u.get('girl') and u['girl'] == 3:
+                    message_text += '\U0001F467\U0001F3FC\U0001F467\U0001F3FC\U0001F467\U0001F3FC'
+                if u.get('girl') and u['girl'] == 4:
+                    message_text += '\U0001F467\U0001F3FC\U0001F467\U0001F3FC\U0001F467\U0001F3FC\U0001F467    \U0001F3FC'
+                if u.get('girl') and u['girl'] == 5:
+                    message_text += '\U0001F467\U0001F3FC\U0001F467\U0001F3FC\U0001F467\U0001F3FC\U0001F467    \U0001F3FC\U0001F467\U0001F3FC'
+                if u.get('car') and u['car'] == 1:
+                    message_text += '\U0001F697'
+                if u.get('car') and u['car'] == 2:
+                    message_text += '\U0001F697\U0001F697'
+                if u.get('car') and u['car'] == 3:
+                    message_text += '\U0001F697\U0001F697\U0001F697'
+                message_text += '\n'
             
-            message_text += u['first_name']
-            if u.get('last_name'):
-                message_text += ' ' + u['last_name']
-            if u.get('username'):
-                message_text += ' [\U0001F4AC](https://telegram.me/' + u['username'] + ')'
-            message_text += ' '
+        message_text += "\n\U0001F527 Instruccions d'ús dels botons: [aquí](http://telegra.ph/Instruccions-d%c3%bas-CELP-familiar-11-28)."
 
-            if u.get('man') and u['man'] == 1:
-                message_text += '\U0001F468\U0001F3FB'
-            if u.get('man') and u['man'] == 2:
-                message_text += '\U0001F468\U0001F3FB\U0001F468\U0001F3FB'
-            if u.get('man') and u['man'] == 3:
-                message_text += '\U0001F468\U0001F3FB\U0001F468\U0001F3FB\U0001F468\U0001F3FB'
-            if u.get('man') and u['man'] == 4:
-                message_text += '\U0001F468\U0001F3FB\U0001F468\U0001F3FB\U0001F468\U0001F3FB\U0001F468\U0001F3FB'
-            if u.get('man') and u['man'] == 5:
-                message_text += '\U0001F468\U0001F3FB\U0001F468\U0001F3FB\U0001F468\U0001F3FB\U0001F468\U0001F3FB\U0001F468\U0001F3FB'
-            if u.get('woman') and u['woman'] == 1:
-                message_text += '\U0001F469\U0001F3FB'
-            if u.get('woman') and u['woman'] == 2:
-                message_text += '\U0001F469\U0001F3FB\U0001F469\U0001F3FB'
-            if u.get('woman') and u['woman'] == 3:
-                message_text += '\U0001F469\U0001F3FB\U0001F469\U0001F3FB\U0001F469\U0001F3FB'
-            if u.get('woman') and u['woman'] == 4:
-                message_text += '\U0001F469\U0001F3FB\U0001F469\U0001F3FB\U0001F469\U0001F3FB\U0001F469\U0001F3FB'
-            if u.get('woman') and u['woman'] == 5:
-                message_text += '\U0001F469\U0001F3FB\U0001F469\U0001F3FB\U0001F469\U0001F3FB\U0001F469\U0001F3FB\U0001F469\U0001F3FB'
-            if u.get('boy') and u['boy'] == 1:
-                message_text += '\U0001F466\U0001F3FC'
-            if u.get('boy') and u['boy'] == 2:
-                message_text += '\U0001F466\U0001F3FC\U0001F466\U0001F3FC'
-            if u.get('boy') and u['boy'] == 3:
-                message_text += '\U0001F466\U0001F3FC\U0001F466\U0001F3FC\U0001F466\U0001F3FC'
-            if u.get('boy') and u['boy'] == 4:
-                message_text += '\U0001F466\U0001F3FC\U0001F466\U0001F3FC\U0001F466\U0001F3FC\U0001F466\U0001F3FC'
-            if u.get('boy') and u['boy'] == 5:
-                message_text += '\U0001F466\U0001F3FC\U0001F466\U0001F3FC\U0001F466\U0001F3FC\U0001F466\U0001F3FC\U0001F466\U0001F3FC'
-            if u.get('girl') and u['girl'] == 1:
-                message_text += '\U0001F467\U0001F3FC'
-            if u.get('girl') and u['girl'] == 2:
-                message_text += '\U0001F467\U0001F3FC\U0001F467\U0001F3FC'
-            if u.get('girl') and u['girl'] == 3:
-                message_text += '\U0001F467\U0001F3FC\U0001F467\U0001F3FC\U0001F467\U0001F3FC'
-            if u.get('girl') and u['girl'] == 4:
-                message_text += '\U0001F467\U0001F3FC\U0001F467\U0001F3FC\U0001F467\U0001F3FC\U0001F467\U0001F3FC'
-            if u.get('girl') and u['girl'] == 5:
-                message_text += '\U0001F467\U0001F3FC\U0001F467\U0001F3FC\U0001F467\U0001F3FC\U0001F467\U0001F3FC\U0001F467\U0001F3FC'
-            if u.get('car') and u['car'] == 1:
-                message_text += '\U0001F697'
-            if u.get('car') and u['car'] == 2:
-                message_text += '\U0001F697\U0001F697'
-            if u.get('car') and u['car'] == 3:
-                message_text += '\U0001F697\U0001F697\U0001F697'
-            message_text += '\n'
-            
-    message_text += "\n\U0001F527 Instruccions d'ús dels botons: [aquí](http://telegra.ph/Instruccions-d%c3%bas-CELP-familiar-11-28)."
-
-    return message_text
+        return message_text
 
 
 class InlineModule(object):
     def __init__(self):
         self.handlers = [
             InlineQueryHandler(self.inline_query),
-            CallbackQueryHandler(self.callback_handler)
+            CallbackQueryHandler(self.callback_handler),
+            ChosenInlineResultHandler(self.inline_stats)
         ]
         self.store = TinyDBStore()
+
+    def inline_stats(self, bot, update):
+        today= datetime.now()
+        dayraw = today.day
+        if int(dayraw) < 10:
+           day = '0' + str(dayraw)
+        else:
+           day = str(dayraw)
+        monthraw = today.month
+        if int(monthraw) < 10:
+           month = '0' + str(monthraw)
+        else:
+           month = str(monthraw)
+        year = today.year
+        today2= day + '/' + month + '/' + str(year)
+        if update.chosen_inline_result:
+            selected= update.chosen_inline_result.result_id
+            user_id = update.chosen_inline_result.from_user.id
+            user_f = update.chosen_inline_result.from_user.first_name
+            user_ln = update.chosen_inline_result.from_user.last_name
+            user_u = update.chosen_inline_result.from_user.username
+            if user_ln == '':
+                user_ln= 'NO'
+            if user_u == '':
+                user_u= 'NO'
+            if selected == '1':
+                 stat= today2 + ';user#id' + str(user_id) + ';' + str(user_f) + ';' + str(user_ln) + ';@' + str(user_u)
+                 with open('invites.csv','a',newline='') as f:
+                     writer=csv.writer(f)
+                     writer.writerow([stat])
 
     def callback_handler(self, bot, update):
         query = update.callback_query
@@ -263,6 +322,25 @@ class InlineModule(object):
                             reply_markup=InlineKeyboardMarkup(inline_keyboard=create_keyboard(event, user)),
                             parse_mode=ParseMode.MARKDOWN,
 			    disable_web_page_preview=True)
+
+        if data.startswith( 'goman' ):
+            callback_query_id=query.id
+            bot.answerCallbackQuery(callback_query_id=query.id, text="Heu canviat el nombre d'homes adults que assistiran a l'excursió")
+        elif data.startswith( 'gowoman' ):
+            callback_query_id=query.id
+            bot.answerCallbackQuery(callback_query_id=query.id, text="Heu canviat el nombre de dones adultes que assistiran a l'excursió")
+        elif data.startswith( 'goboy' ):
+            callback_query_id=query.id
+            bot.answerCallbackQuery(callback_query_id=query.id, text="Heu canviat el nombre de nens que assistiran a l'excursió")
+        elif data.startswith( 'gogirl' ):
+            callback_query_id=query.id
+            bot.answerCallbackQuery(callback_query_id=query.id, text="Heu canviat el nombre de nenes que assistiran a l'excursió")
+        elif data.startswith( 'gocar' ):
+            callback_query_id=query.id
+            bot.answerCallbackQuery(callback_query_id=query.id, text="Heu canviat el nombre de cotxes per a l'excursió")
+        elif data.startswith( 'go' ):
+            callback_query_id=query.id
+            bot.answerCallbackQuery(callback_query_id=query.id, text="Heu canviat la vostra assistència a l'excursió")
 
     def toggle_user(self, event, user):
         if not event.get('users'):
@@ -448,30 +526,31 @@ class InlineModule(object):
         user_id = update.inline_query.from_user.id
         user = update.inline_query.from_user.__dict__
 
-        results = []
-        events = self.store.get_events(user_id, query)
+        if str(user_id) in other_users.values():
+             results = []
+             events = self.store.get_events(user_id, query)
 
-        for event in events:
-            keyboard = create_keyboard(event, user)
-            result = InlineQueryResultArticle(id=event.eid,
-                                              title=event['name'],
-                                              description=format_date(event['date']),
-                                              thumb_url='https://raw.githubusercontent.com/nilmoreno/create-event-bot/master/images/celp_bot_calendar.png',
-                                              input_message_content=InputTextMessageContent(
-                                                  create_event_message(event, user),
-                                                  parse_mode=ParseMode.MARKDOWN,
-						  disable_web_page_preview=True
-                                              ),
-                                              reply_markup=InlineKeyboardMarkup(inline_keyboard=keyboard))
-            results.append(result)
+             for event in events:
+                 keyboard = create_keyboard(event, user)
+                 result = InlineQueryResultArticle(id=event.eid,
+                                                   title=event['name'],
+                                                   description=event['description'],
+                                                   thumb_url='https://raw.githubusercontent.com/nilmoreno/create-event-bot/master/images/celp_bot_calendar.png',
+                                                   input_message_content=InputTextMessageContent(
+                                                       create_event_message(event, user),
+                                                       parse_mode=ParseMode.MARKDOWN,
+						       disable_web_page_preview=True
+                                                   ),
+                                                   reply_markup=InlineKeyboardMarkup(inline_keyboard=keyboard))
+                 results.append(result)
 
-        bot.answerInlineQuery(
-            update.inline_query.id,
-            results=results,
-            switch_pm_text='Crea una excursió nova...',
-            switch_pm_parameter='new',
-            is_personal=True
-        )
+             bot.answerInlineQuery(
+                 update.inline_query.id,
+                 results=results,
+                 switch_pm_text='Crea una excursió nova...',
+                 switch_pm_parameter='new',
+                 is_personal=True
+             )
 
     def get_handlers(self):
         return self.handlers

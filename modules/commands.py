@@ -10,6 +10,8 @@ from validators import url, ValidationFailure
 
 from store import TinyDBStore
 
+from config import params, allowed_users, other_users
+
 FIELDS = [
     {
         'name': 'name',
@@ -151,23 +153,27 @@ class CommandsModule(object):
             CommandHandler('start', self.start_command, pass_args=True),
             CommandHandler('skip', self.skip_command),
 	    CommandHandler('cancel', self.cancel_command),
+            CommandHandler('invite', self.invite_channel),
+            CommandHandler('raw', self.get_raw),
             CommandHandler('help', help_command),
-            MessageHandler([Filters.text], self.message)
+            MessageHandler((Filters.text), self.message)
         ]
         self.store = TinyDBStore()
 
     def start_command(self, bot, update, args):
         user_id = update.message.from_user.id
-        # Replace USER_ID with your user_id number:
-        if user_id == USER_ID:
-            self.store.new_draft(user_id)
-            bot.sendMessage(update.message.chat_id,parse_mode='Markdown',
-                        text="Crearem un esdeveniment per a una excursió.\n\n\u0031\u20E3 El primer que heu de fer és enviar-me el *nom de l\'excursió*.\n\nSi no voleu continuar amb el procés, envieu /cancel.",
-                        reply_markup=ReplyKeyboardHide())
-        else:
-            f_name = update.message.from_user.first_name
-            bot.sendMessage(update.message.chat_id,
-                        text= str(f_name) + ", no teniu permisos per crear excursions \U0001F622.\nSi necessiteu permisos, us caldrà el vostre identificador d'usuari.\n\U0001F194 = " + str(user_id) + ".")
+        if len(args) == 0:
+            if str(user_id) in allowed_users.values():
+                self.store.new_draft(user_id)
+                bot.sendMessage(update.message.chat_id,parse_mode='Markdown',
+                            text="Crearem un esdeveniment per a una excursió.\n\n\u0031\u20E3 El primer que heu de fer és enviar-me el *nom de l\'excursió*.\n\nSi no voleu continuar amb el procés, envieu /cancel.",
+                            reply_markup=ReplyKeyboardHide())
+            else:
+                f_name = update.message.from_user.first_name
+                bot.sendMessage(update.message.chat_id,
+                            text= str(f_name) + ", no teniu permisos per crear excursions \U0001F622.\nSi necessiteu permisos, us caldrà el vostre identificador d'usuari.\n\U0001F194 = " + str(user_id) + ".")
+        elif len(args) == 1 and args[0] == 'convida-al-canal':
+            self.invite_channel(bot, update)
 
     def message(self, bot, update):
         user_id = update.message.from_user.id
@@ -487,6 +493,68 @@ class CommandsModule(object):
             text="S'ha creat l'excursió",
             reply_markup=InlineKeyboardMarkup(inline_keyboard=keyboard)
         )
+
+    def invite_channel(self, bot, update):
+        user_id = update.message.from_user.id
+        user_f = update.message.from_user.first_name
+        user_ln = update.message.from_user.last_name
+        user_u = update.message.from_user.username
+        if user_ln != "" and user_u != "":
+           user_d= user_f + " " + user_ln + "* (podeu contactar-hi amb @" + user_u + ")"
+        elif user_ln == "" and user_u != "":
+           user_d= user_f + "* (podeu contactar-hi amb @" + user_u + ")" 
+        elif user_ln != "" and user_u == "":
+           user_d= user_f + " " + user_ln + "*"
+        elif user_ln == "" and user_u == "":
+           user_d= user_f + "*"
+        if str(user_id) in other_users.values():
+            keyboard = [[InlineKeyboardButton(text="\u2709\uFE0F Convida al canal", switch_inline_query="Convideu al canal")], []]
+            bot.sendMessage(
+                update.message.chat_id,
+                text="Visca! Teniu permisos per a convidar gent al canal privat *CELP familiar*.\n\nPer convidar a algú al canal primer premeu el botó _Convida al canal_, i a continuació seleccioneu l'usuari a qui voleu convidar. Llavors haureu de prémer la capseta amb el rètol *«Convideu al canal»*",
+                parse_mode='Markdown',
+                reply_markup=InlineKeyboardMarkup(inline_keyboard=keyboard)
+            )
+            bot.sendMessage(
+                chat_id= allowed_users['admin'],
+                text="\U0001F6A6 L'usuari *" +user_d+ " ha volgut convidar a algú al canal, i té permisos.",
+                parse_mode='Markdown'
+            )
+        else:
+            bot.sendMessage(
+                update.message.chat_id,
+                text="No teniu permisos per convidar gent al canal privat *CELP familiar*.",
+                parse_mode='Markdown'
+            )
+            bot.sendMessage(
+                chat_id= allowed_users['admin'],
+                text="\u26A0\uFE0F\n\U0001F6A6 L'usuari *" +user_d+ " ha volgut convidar a algú al canal i no té permisos.\nPer donar-li permisos, el seu \U0001F194: " + user_id + ".",
+                parse_mode='Markdown'
+            )
+
+    def get_raw(self, bot, update):
+        user_id = update.message.from_user.id
+        if str(user_id) == allowed_users['admin']:
+            bot.sendMessage(
+                update.message.chat_id,
+                text="Us envio els fitxers amb les *dades en cru*:",
+                parse_mode='Markdown'
+            )
+            events_file= open('events.json', 'rb')
+            bot.sendDocument(update.message.chat_id,
+                             document=events_file)
+            drafts_file= open('event_drafts.json', 'rb')
+            bot.sendDocument(update.message.chat_id,
+                             document=drafts_file)
+            invites_file= open('invites.csv', 'rb')
+            bot.sendDocument(update.message.chat_id,
+                             document=invites_file)
+        else:
+            bot.sendMessage(
+                update.message.chat_id,
+                text="No teniu permisos per realitzar aquesta acció.",
+                parse_mode='Markdown'
+            )
 
     def get_handlers(self):
         return self.handlers

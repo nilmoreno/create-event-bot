@@ -2,7 +2,7 @@
 <html>
 <head>
 	<!-- INDICAR NOM DE LA PÀGINA -->
-	<title>Matagalls</title>
+	<title>Castell de Cervelló</title>
 	<link rel="shortcut icon" href="../favicon.png"/>
 	<meta http-equiv="Content-Type" content="text/html" charset="UTF-8"/>
 	<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
@@ -16,23 +16,31 @@
 	</style>
 	<!--[if lte IE 8]><link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.2/leaflet.ie.css" /><![endif]-->
 	<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css">
-	<link rel="stylesheet" href="assets/css/leaflet-0.7.2.css" />
+	<!--<link rel="stylesheet" href="assets/css/leaflet-0.7.2.css" />-->
+	<link rel="stylesheet" href="assets/css/leaflet-1.0.0.css" />
 	<link rel="stylesheet" href="assets/css/leaflet.elevation-0.0.4.css" />
 	<link rel="stylesheet" href="assets/css/L.Control.Locate.css" />
 	<link rel="stylesheet" href="assets/css/leaflet-control-credits.css" />
 	
 	<script type="text/javascript">
         /* INDICAR ALÇADA MÀXIMA DEL PERFIL */
-	var altmax = 2000
-	var altmin = 1000
+	var altmax = 800
+	var altmin = 0
+        var _DEFAULT_POLYLINE_OPTS = {
+             color: 'blue',
+             opacity: '0'
+        }
 	</script>
 	<script type="text/javascript" src="assets/js/d3.v3.min.js" charset="utf-8"></script>
-	<script type="text/javascript" src="assets/js/leaflet-0.7.2.js"></script>
+	<!--<script type="text/javascript" src="assets/js/leaflet-0.7.2.js"></script>-->
+	<script type="text/javascript" src="assets/js/leaflet-1.0.0.js"></script>
         <script type="text/javascript" src="assets/js/L.Control.Locate.js" ></script>
         <script type="text/javascript" src="assets/js/leaflet-side-by-side.js"></script>
 	<script type="text/javascript" src="assets/js/leaflet.elevation-0.0.4.src.js"></script>
 	<script type="text/javascript" src="assets/js/gpx.js"></script>
 	<script type="text/javascript" src="assets/js/leaflet-control-credits.js"></script>
+        <script type="text/javascript" src="assets/hiking-js/castellcervello.js"></script>
+	<script type="text/javascript" src="assets/js/leaflet.hotline.js"></script>
 	 
 </head>
 <body>
@@ -55,6 +63,8 @@
         maxZoom: 18
         }).addTo(map)
 
+
+
 	lc = L.control.locate({
     		strings: {
       		  title: "Localitza'm al mapa"
@@ -62,20 +72,19 @@
 	}).addTo(map);
 
 	L.controlCredits({
-                image: "assets/img/celp.png",
-              /*image: "assets/img/celp2.png",*/
+              /*image: "assets/img/celp.png",*/
+        	image: "assets/img/celp2.png",
         	link: "http://celapalma.jimdo.com/",
         	text: "@celp_bot per <b>CELP</b><br />Centre excursionista<br />de la Palma"
         }).addTo(map);
 
 	L.control.sideBySide(stamenLayer, osmLayer).addTo(map);
 	</script>
-
 	<script type="text/javascript">
 		var el = L.control.elevation();
 		el.addTo(map);
 		/* INDICAR RUTA FITXER GPX */
-		var g=new L.GPX("./gpx/matagalls.gpx", {
+		var g=new L.GPX("./gpx/castellcervello.gpx", {
 			async: true,
 			 marker_options: {
 			    startIconUrl: './assets/img/pin-icon-start.png',
@@ -92,5 +101,10 @@
 		g.addTo(map);
 		map.addLayer(service);
 	</script>
+
+        <script>
+        var hotlineLayer = new L.hotline(coords, {min: 1,max: waypointnum,palette: {0.0: '#99cc51', 0.3: '#99cc51', 0.7: '#e66161', 1.0: '#e66161'}, weight: 5,outlineColor: '#2a2a2a',outlineWidth: 1}).addTo(map);
+        </script>
+
 </body>
 </html>
