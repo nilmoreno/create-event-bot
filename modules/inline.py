@@ -5,7 +5,6 @@ import locale
 import json
 import csv
 from six.moves import urllib
-from datetime import datetime
 
 from telegram import InlineQueryResultArticle, ParseMode, \
     InputTextMessageContent, InlineKeyboardButton, InlineKeyboardMarkup, Emoji
@@ -197,7 +196,7 @@ class InlineModule(object):
         self.store = TinyDBStore()
 
     def inline_stats(self, bot, update):
-        today= datetime.now()
+        today= datetime.datetime.now()
         dayraw = today.day
         if int(dayraw) < 10:
            day = '0' + str(dayraw)
