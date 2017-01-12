@@ -88,20 +88,21 @@ def format_date(param):
 
 
 def create_event_message(event, user):
-    if event['invite'] == 'yes':
-        user_f = user['first_name']
-        user_ln = user['last_name']
-        user_u = user['username']
-        if user_ln != "" and user_u != "":
-           user_d= user_f + " " + user_ln + "* (podeu contactar-hi amb @" + user_u + ")"
-        elif user_ln == "" and user_u != "":
-           user_d= user_f + "* (podeu contactar-hi amb @" + user_u + ")" 
-        elif user_ln != "" and user_u == "":
-           user_d= user_f + " " + user_ln + "*"
-        elif user_ln == "" and user_u == "":
-           user_d= user_f + "*"
-        message_text = 'Missatge del robot del CELP\n\n\u2709\uFE0F *' +user_d + " us convida al canal privat *«CELP familiar»*.\n\nPer entrar-hi premeu el botó \U0001F4E2 _Entreu a CELP familiar_, i a continuació seleccioneu *«JOIN»* o bé *«AFEGEIX-M'HI»*.\n\nSi us afegiu a aquest canal privat només rebreu informació de les excursions i tindreu l'opció d'apuntar-vos-hi, però això no és un grup, per tant ningú hi pot escriure."
-        return message_text
+    if event['name'] == 'Convideu al canal':
+        if event['invite'] == 'yes':
+            user_f = user['first_name']
+            user_ln = user['last_name']
+            user_u = user['username']
+            if user_ln != "" and user_u != "":
+               user_d= user_f + " " + user_ln + "* (podeu contactar-hi amb @" + user_u + ")"
+            elif user_ln == "" and user_u != "":
+               user_d= user_f + "* (podeu contactar-hi amb @" + user_u + ")" 
+            elif user_ln != "" and user_u == "":
+               user_d= user_f + " " + user_ln + "*"
+            elif user_ln == "" and user_u == "":
+               user_d= user_f + "*"
+            message_text = 'Missatge del robot del CELP\n\n\u2709\uFE0F *' +user_d + " us convida al canal privat *«CELP familiar»*.\n\nPer entrar-hi premeu el botó \U0001F4E2 _Entreu a CELP familiar_, i a continuació seleccioneu *«JOIN»* o bé *«AFEGEIX-M'HI»*.\n\nSi us afegiu a aquest canal privat només rebreu informació de les excursions i tindreu l'opció d'apuntar-vos-hi, però això no és un grup, per tant ningú hi pot escriure."
+            return message_text
     else:
         message_text = "*{name}*\n{date}\n".format(
             name=event['name'],

@@ -156,7 +156,7 @@ class CommandsModule(object):
             CommandHandler('invite', self.invite_channel),
             CommandHandler('raw', self.get_raw),
             CommandHandler('help', help_command),
-            MessageHandler((Filters.text), self.message)
+            MessageHandler([Filters.text], self.message)
         ]
         self.store = TinyDBStore()
 
