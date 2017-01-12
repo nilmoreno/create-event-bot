@@ -12,7 +12,7 @@ from telegram.ext import InlineQueryHandler, CallbackQueryHandler, ChosenInlineR
 
 from store import TinyDBStore
 
-from config import params, links, other_users
+from config import params, links, allowed_users, other_users
 
 
 def create_event_payload(event):
@@ -67,7 +67,7 @@ def create_keyboard(event, user):
         buttons = [
             InlineKeyboardButton(
                 text="\U0001F4C6 Calendari",
-                url='http://www.konfraria.org/calendari_celp/add.html#' + create_event_payload(event)
+                url='http://celapalma.org/calendari_celp/add.html#' + create_event_payload(event)
             )
         ]
 
@@ -525,7 +525,7 @@ class InlineModule(object):
         user_id = update.inline_query.from_user.id
         user = update.inline_query.from_user.__dict__
 
-        if str(user_id) in other_users.values():
+        if str(user_id) in allowed_users.values():
              results = []
              events = self.store.get_events(user_id, query)
 
@@ -534,7 +534,7 @@ class InlineModule(object):
                  result = InlineQueryResultArticle(id=event.eid,
                                                    title=event['name'],
                                                    description=event['description'],
-                                                   thumb_url='https://raw.githubusercontent.com/nilmoreno/create-event-bot/master/images/celp_bot_calendar.png',
+                                                   thumb_url='http://celapalma.org/calendari_celp/inline_images/celp_bot_calendar.png',
                                                    input_message_content=InputTextMessageContent(
                                                        create_event_message(event, user),
                                                        parse_mode=ParseMode.MARKDOWN,
@@ -548,6 +548,32 @@ class InlineModule(object):
                  results=results,
                  switch_pm_text='Crea una excursió nova...',
                  switch_pm_parameter='new',
+                 is_personal=True
+             )
+
+        elif str(user_id) in other_users.values():
+             results = []
+             events = self.store.get_events(user_id, query)
+
+             for event in events:
+                 keyboard = create_keyboard(event, user)
+                 result = InlineQueryResultArticle(id=event.eid,
+                                                   title=event['name'],
+                                                   description=event['description'],
+                                                   thumb_url='http://celapalma.org/calendari_celp/inline_images/celp_bot_imatge.png',
+                                                   input_message_content=InputTextMessageContent(
+                                                       create_event_message(event, user),
+                                                       parse_mode=ParseMode.MARKDOWN,
+						       disable_web_page_preview=True
+                                                   ),
+                                                   reply_markup=InlineKeyboardMarkup(inline_keyboard=keyboard))
+                 results.append(result)
+
+             bot.answerInlineQuery(
+                 update.inline_query.id,
+                 results=results,
+                 #switch_pm_text='Crea una excursió nova...',
+                 #switch_pm_parameter='new',
                  is_personal=True
              )
 
