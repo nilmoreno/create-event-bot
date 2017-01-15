@@ -171,9 +171,9 @@ def create_event_message(event, user):
                 if u.get('girl') and u['girl'] == 3:
                     message_text += '\U0001F467\U0001F3FC\U0001F467\U0001F3FC\U0001F467\U0001F3FC'
                 if u.get('girl') and u['girl'] == 4:
-                    message_text += '\U0001F467\U0001F3FC\U0001F467\U0001F3FC\U0001F467\U0001F3FC\U0001F467 \U0001F3FC'
+                    message_text += '\U0001F467\U0001F3FC\U0001F467\U0001F3FC\U0001F467\U0001F3FC\U0001F467\U0001F3FC'
                 if u.get('girl') and u['girl'] == 5:
-                    message_text += '\U0001F467\U0001F3FC\U0001F467\U0001F3FC\U0001F467\U0001F3FC\U0001F467 \U0001F3FC\U0001F467\U0001F3FC'
+                    message_text += '\U0001F467\U0001F3FC\U0001F467\U0001F3FC\U0001F467\U0001F3FC\U0001F467\U0001F3FC\U0001F467\U0001F3FC'
                 if u.get('car') and u['car'] == 1:
                     message_text += '\U0001F697'
                 if u.get('car') and u['car'] == 2:
