@@ -34,7 +34,7 @@ def create_keyboard(event, user):
         return [button, []]
 
     else:
-        eventdate2= int(event['date'])
+        eventdate2= int(event['date']) + 600
 
         today= datetime.datetime.now()
         day = str(today.day)
@@ -83,7 +83,7 @@ def create_keyboard(event, user):
 
         buttons = [
             InlineKeyboardButton(
-                text="\U0001F4C6 Calendari",
+                text="\U0001F5D3 Calendari",
                 url='http://celapalma.org/calendari_celp/add.html#' + create_event_payload(event)
             )
         ]
@@ -94,7 +94,7 @@ def create_keyboard(event, user):
                 url=event.get('route')
             ))
 
-        if today3 > eventdate2:
+        if today3 >= eventdate2:
              return [buttons, []]
         else:
              return [button, button2, buttons, []]
@@ -124,7 +124,7 @@ def create_event_message(event, user):
             message_text = 'Missatge del robot del CELP\n\n\u2709\uFE0F *' +user_d + " us convida al canal privat *«CELP familiar»*.\n\nPer entrar-hi premeu el botó \U0001F4E2 _Entreu a CELP familiar_, i a continuació seleccioneu *«JOIN»* o bé *«AFEGEIX-M'HI»*.\n\nSi us afegiu a aquest canal privat només rebreu informació de les excursions i tindreu l'opció d'apuntar-vos-hi, però això no és un grup, per tant ningú hi pot escriure."
             return message_text
     else:
-        eventdate2= int(event['date'])
+        eventdate2= int(event['date']) + 600
 
         today= datetime.datetime.now()
         day = str(today.day)
@@ -157,7 +157,7 @@ def create_event_message(event, user):
     #       message_text += '\n' + Emoji.CLOCKWISE_DOWNWARDS_AND_UPWARDS_OPEN_CIRCLE_ARROWS + ' [Mapa amb la ruta](' + event['route'] + ')'
 
         if 'users' in event and len(event['users']) > 0:
-            if today3 > eventdate2:
+            if today3 >= eventdate2:
                 message_text += '\nS\'hi van apuntar: \n'
             else:
                 message_text += '\nHi aniran: \n'
@@ -219,8 +219,8 @@ def create_event_message(event, user):
                 if u.get('car') and u['car'] == 3:
                     message_text += '\U0001F697\U0001F697\U0001F697'
                 message_text += '\n'
-        if today3 > eventdate2:
-             message_text += "\n\U0001F5D3 Excursió tancada"
+        if today3 >= eventdate2:
+             message_text += "\n\U0001F5C3 Excursió arxivada."
         else:
              message_text += "\n\U0001F527 Instruccions d'ús dels botons: [aquí](http://telegra.ph/Instruccions-d%c3%bas-CELP-familiar-11-28)."
 
@@ -274,7 +274,7 @@ class InlineModule(object):
         (command, event_id) = tuple(data.split('_'))
         event = self.store.get_event(event_id)
 
-        eventdate2= int(event['date'])
+        eventdate2= int(event['date']) + 600
 
         today= datetime.datetime.now()
         day = str(today.day)
@@ -372,7 +372,7 @@ class InlineModule(object):
         if command == 'gocar' and eventdate2 > today3:
             event = self.toggle_car(event, user)
 
-        if today3 > eventdate2:
+        if today3 >= eventdate2:
             event = self.past_event(event, user)
 
         bot.editMessageText(text=create_event_message(event, user),
@@ -382,23 +382,47 @@ class InlineModule(object):
 			    disable_web_page_preview=True)
 
         if data.startswith( 'goman' ):
-            callback_query_id=query.id
-            bot.answerCallbackQuery(callback_query_id=query.id, text="Heu canviat el nombre d'homes adults que assistiran a l'excursió")
+            if eventdate2 > today3:
+                callback_query_id=query.id
+                bot.answerCallbackQuery(callback_query_id=query.id, text="Heu canviat el nombre d'homes adults que assistiran a l'excursió")
+            else:
+                callback_query_id=query.id
+                bot.answerCallbackQuery(callback_query_id=query.id, text="\u231B\uFE0F Ha vençut la data i s'ha arxivat l'excursió")
         elif data.startswith( 'gowoman' ):
-            callback_query_id=query.id
-            bot.answerCallbackQuery(callback_query_id=query.id, text="Heu canviat el nombre de dones adultes que assistiran a l'excursió")
+            if eventdate2 > today3:
+                callback_query_id=query.id
+                bot.answerCallbackQuery(callback_query_id=query.id, text="Heu canviat el nombre de dones adultes que assistiran a l'excursió")
+            else:
+                callback_query_id=query.id
+                bot.answerCallbackQuery(callback_query_id=query.id, text="\u231B\uFE0F Ha vençut la data i s'ha arxivat l'excursió")
         elif data.startswith( 'goboy' ):
-            callback_query_id=query.id
-            bot.answerCallbackQuery(callback_query_id=query.id, text="Heu canviat el nombre de nens que assistiran a l'excursió")
+            if eventdate2 > today3:
+                callback_query_id=query.id
+                bot.answerCallbackQuery(callback_query_id=query.id, text="Heu canviat el nombre de nens que assistiran a l'excursió")
+            else:
+                callback_query_id=query.id
+                bot.answerCallbackQuery(callback_query_id=query.id, text="\u231B\uFE0F Ha vençut la data i s'ha arxivat l'excursió")
         elif data.startswith( 'gogirl' ):
-            callback_query_id=query.id
-            bot.answerCallbackQuery(callback_query_id=query.id, text="Heu canviat el nombre de nenes que assistiran a l'excursió")
+            if eventdate2 > today3:
+                callback_query_id=query.id
+                bot.answerCallbackQuery(callback_query_id=query.id, text="Heu canviat el nombre de nenes que assistiran a l'excursió")
+            else:
+                callback_query_id=query.id
+                bot.answerCallbackQuery(callback_query_id=query.id, text="\u231B\uFE0F Ha vençut la data i s'ha arxivat l'excursió")
         elif data.startswith( 'gocar' ):
-            callback_query_id=query.id
-            bot.answerCallbackQuery(callback_query_id=query.id, text="Heu canviat el nombre de cotxes per a l'excursió")
+            if eventdate2 > today3:
+                callback_query_id=query.id
+                bot.answerCallbackQuery(callback_query_id=query.id, text="Heu canviat el nombre de cotxes per a l'excursió")
+            else:
+                callback_query_id=query.id
+                bot.answerCallbackQuery(callback_query_id=query.id, text="\u231B\uFE0F Ha vençut la data i s'ha arxivat l'excursió")
         elif data.startswith( 'go' ):
-            callback_query_id=query.id
-            bot.answerCallbackQuery(callback_query_id=query.id, text="Heu canviat la vostra assistència a l'excursió")
+            if eventdate2 > today3:
+                callback_query_id=query.id
+                bot.answerCallbackQuery(callback_query_id=query.id, text="Heu canviat la vostra assistència a l'excursió")
+            else:
+                callback_query_id=query.id
+                bot.answerCallbackQuery(callback_query_id=query.id, text="\u231B\uFE0F Ha vençut la data i s'ha arxivat l'excursió")
 
     def toggle_user(self, event, user):
         if not event.get('users'):
