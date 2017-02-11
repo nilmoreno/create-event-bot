@@ -528,7 +528,7 @@ class CommandsModule(object):
             )
             bot.sendMessage(
                 chat_id= allowed_users['admin'],
-                text="\u26A0\uFE0F\n\U0001F6A6 L'usuari *" +user_d+ " ha volgut convidar a algú al canal i no té permisos.\nPer donar-li permisos, el seu \U0001F194: " + user_id + ".",
+                text="\u26A0\uFE0F\n\U0001F6A6 L'usuari *" +user_d+ " ha volgut convidar a algú al canal i no té permisos.\nPer donar-li permisos, el seu \U0001F194: " + str(user_id) + ".",
                 parse_mode='Markdown'
             )
 

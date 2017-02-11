@@ -172,46 +172,101 @@ def create_event_message(event, user):
                     message_text += ' [\U0001F4AC](https://telegram.me/' + u['username'] + ')'
                 message_text += ' '
 
-                if u.get('man') and u['man'] == 1:
-                    message_text += '\U0001F468\U0001F3FB'
-                if u.get('man') and u['man'] == 2:
-                    message_text += '\U0001F468\U0001F3FB\U0001F468\U0001F3FB'
-                if u.get('man') and u['man'] == 3:
-                    message_text += '\U0001F468\U0001F3FB\U0001F468\U0001F3FB\U0001F468\U0001F3FB'
-                if u.get('man') and u['man'] == 4:
-                    message_text += '\U0001F468\U0001F3FB\U0001F468\U0001F3FB\U0001F468\U0001F3FB\U0001F468\U0001F3FB'
-                if u.get('man') and u['man'] == 5:
-                    message_text += '\U0001F468\U0001F3FB\U0001F468\U0001F3FB\U0001F468\U0001F3FB\U0001F468\U0001F3FB\U0001F468\U0001F3FB'
-                if u.get('woman') and u['woman'] == 1:
-                    message_text += '\U0001F469\U0001F3FB'
-                if u.get('woman') and u['woman'] == 2:
-                    message_text += '\U0001F469\U0001F3FB\U0001F469\U0001F3FB'
-                if u.get('woman') and u['woman'] == 3:
-                    message_text += '\U0001F469\U0001F3FB\U0001F469\U0001F3FB\U0001F469\U0001F3FB'
-                if u.get('woman') and u['woman'] == 4:
-                    message_text += '\U0001F469\U0001F3FB\U0001F469\U0001F3FB\U0001F469\U0001F3FB\U0001F469\U0001F3FB'
-                if u.get('woman') and u['woman'] == 5:
-                    message_text += '\U0001F469\U0001F3FB\U0001F469\U0001F3FB\U0001F469\U0001F3FB\U0001F469\U0001F3FB\U0001F469\U0001F3FB'
-                if u.get('boy') and u['boy'] == 1:
-                    message_text += '\U0001F466\U0001F3FC'
-                if u.get('boy') and u['boy'] == 2:
-                    message_text += '\U0001F466\U0001F3FC\U0001F466\U0001F3FC'
-                if u.get('boy') and u['boy'] == 3:
-                    message_text += '\U0001F466\U0001F3FC\U0001F466\U0001F3FC\U0001F466\U0001F3FC'
-                if u.get('boy') and u['boy'] == 4:
-                    message_text += '\U0001F466\U0001F3FC\U0001F466\U0001F3FC\U0001F466\U0001F3FC\U0001F466\U0001F3FC'
-                if u.get('boy') and u['boy'] == 5:
-                    message_text += '\U0001F466\U0001F3FC\U0001F466\U0001F3FC\U0001F466\U0001F3FC\U0001F466\U0001F3FC\U0001F466\U0001F3FC'
-                if u.get('girl') and u['girl'] == 1:
-                    message_text += '\U0001F467\U0001F3FC'
-                if u.get('girl') and u['girl'] == 2:
-                    message_text += '\U0001F467\U0001F3FC\U0001F467\U0001F3FC'
-                if u.get('girl') and u['girl'] == 3:
-                    message_text += '\U0001F467\U0001F3FC\U0001F467\U0001F3FC\U0001F467\U0001F3FC'
-                if u.get('girl') and u['girl'] == 4:
-                    message_text += '\U0001F467\U0001F3FC\U0001F467\U0001F3FC\U0001F467\U0001F3FC\U0001F467\U0001F3FC'
-                if u.get('girl') and u['girl'] == 5:
-                    message_text += '\U0001F467\U0001F3FC\U0001F467\U0001F3FC\U0001F467\U0001F3FC\U0001F467\U0001F3FC\U0001F467\U0001F3FC'
+                #Famílies de pare amb 1 o 2 fills
+                if u['man'] == 1 and u['woman'] == 0 and u['boy'] == 1 and u['girl'] == 0:
+                    message_text += '\U0001F468\u200D\U0001F466'
+                elif u['man'] == 1 and u['woman'] == 0 and u['boy'] == 0 and u['girl'] == 1:
+                    message_text += '\U0001F468\u200D\U0001F467'
+                elif u['man'] == 1 and u['woman'] == 0 and u['boy'] == 1 and u['girl'] == 1:
+                    message_text += '\U0001F468\u200D\U0001F467\u200D\U0001F466'
+                elif u['man'] == 1 and u['woman'] == 0 and u['boy'] == 2 and u['girl'] == 0:
+                    message_text += '\U0001F468\u200D\U0001F466\u200D\U0001F466'
+                elif u['man'] == 1 and u['woman'] == 0 and u['boy'] == 0 and u['girl'] == 2:
+                    message_text += '\U0001F468\u200D\U0001F467\u200D\U0001F467'
+                #Famílies de mare amb 1 o 2 fills
+                elif u['man'] == 0 and u['woman'] == 1 and u['boy'] == 1 and u['girl'] == 0:
+                    message_text += '\U0001F469\u200D\U0001F466'
+                elif u['man'] == 0 and u['woman'] == 1 and u['boy'] == 0 and u['girl'] == 1:
+                    message_text += '\U0001F469\u200D\U0001F467'
+                elif u['man'] == 0 and u['woman'] == 1 and u['boy'] == 1 and u['girl'] == 1:
+                    message_text += '\U0001F469\u200D\U0001F467\u200D\U0001F466'
+                elif u['man'] == 0 and u['woman'] == 1 and u['boy'] == 2 and u['girl'] == 0:
+                    message_text += '\U0001F469\u200D\U0001F466\u200D\U0001F466'
+                elif u['man'] == 0 and u['woman'] == 1 and u['boy'] == 0 and u['girl'] == 2:
+                    message_text += '\U0001F469\u200D\U0001F467\u200D\U0001F467'
+                #Famílies de parella i 1 o 2 fills
+                elif u['man'] == 1 and u['woman'] == 1 and u['boy'] == 1 and u['girl'] == 0:
+                    message_text += '\U0001F46A'
+                elif u['man'] == 1 and u['woman'] == 1 and u['boy'] == 0 and u['girl'] == 1:
+                    message_text += '\U0001F468\u200D\U0001F469\u200D\U0001F467'
+                elif u['man'] == 1 and u['woman'] == 1 and u['boy'] == 1 and u['girl'] == 1:
+                    message_text += '\U0001F468\u200D\U0001F469\u200D\U0001F467\u200D\U0001F466'
+                elif u['man'] == 1 and u['woman'] == 1 and u['boy'] == 2 and u['girl'] == 0:
+                    message_text += '\U0001F468\u200D\U0001F469\u200D\U0001F466\u200D\U0001F466'
+                elif u['man'] == 1 and u['woman'] == 1 and u['boy'] == 0 and u['girl'] == 2:
+                    message_text += '\U0001F468\u200D\U0001F469\u200D\U0001F467\u200D\U0001F467'
+                #Famílies de parella i 3 fills
+                elif u['man'] == 1 and u['woman'] == 1 and u['boy'] == 0 and u['girl'] == 3:
+                    message_text += '\U0001F468\u200D\U0001F467\u200D\U0001F467\U0001F469\u200D\U0001F467'
+                elif u['man'] == 1 and u['woman'] == 1 and u['boy'] == 1 and u['girl'] == 2:
+                    message_text += '\U0001F468\u200D\U0001F467\u200D\U0001F466\U0001F469\u200D\U0001F467'
+                elif u['man'] == 1 and u['woman'] == 1 and u['boy'] == 3 and u['girl'] == 0:
+                    message_text += '\U0001F468\u200D\U0001F466\u200D\U0001F466\U0001F469\u200D\U0001F466'
+                elif u['man'] == 1 and u['woman'] == 1 and u['boy'] == 2 and u['girl'] == 1:
+                    message_text += '\U0001F468\u200D\U0001F466\u200D\U0001F466\U0001F469\u200D\U0001F467'
+
+                #Famílies de parella i 4 fills
+                elif u['man'] == 1 and u['woman'] == 1 and u['boy'] == 0 and u['girl'] == 4:
+                    message_text += '\U0001F468\u200D\U0001F467\u200D\U0001F467\U0001F469\u200D\U0001F467\u200D\U0001F467'
+                elif u['man'] == 1 and u['woman'] == 1 and u['boy'] == 1 and u['girl'] == 3:
+                    message_text += '\U0001F468\u200D\U0001F467\u200D\U0001F466\U0001F469\u200D\U0001F467\u200D\U0001F467'
+                elif u['man'] == 1 and u['woman'] == 1 and u['boy'] == 2 and u['girl'] == 2:
+                    message_text += '\U0001F468\u200D\U0001F466\u200D\U0001F466\U0001F469\u200D\U0001F467\u200D\U0001F467'
+                elif u['man'] == 1 and u['woman'] == 1 and u['boy'] == 3 and u['girl'] == 1:
+                    message_text += '\U0001F468\u200D\U0001F466\u200D\U0001F466\U0001F469\u200D\U0001F467\u200D\U0001F466'
+                elif u['man'] == 1 and u['woman'] == 1 and u['boy'] == 4 and u['girl'] == 0:
+                    message_text += '\U0001F468\u200D\U0001F466\u200D\U0001F466\U0001F469\u200D\U0001F466\u200D\U0001F466'
+                else:
+                     if u.get('man') and u['man'] == 1:
+                         message_text += '\U0001F468\U0001F3FB'
+                     if u.get('man') and u['man'] == 2:
+                         message_text += '\U0001F468\U0001F3FB\U0001F468\U0001F3FB'
+                     if u.get('man') and u['man'] == 3:
+                         message_text += '\U0001F468\U0001F3FB\U0001F468\U0001F3FB\U0001F468\U0001F3FB'
+                     if u.get('man') and u['man'] == 4:
+                         message_text += '\U0001F468\U0001F3FB\U0001F468\U0001F3FB\U0001F468\U0001F3FB\U0001F468\U0001F3FB'
+                     if u.get('man') and u['man'] == 5:
+                         message_text += '\U0001F468\U0001F3FB\U0001F468\U0001F3FB\U0001F468\U0001F3FB\U0001F468\U0001F3FB\U0001F468\U0001F3FB'
+                     if u.get('woman') and u['woman'] == 1:
+                         message_text += '\U0001F469\U0001F3FB'
+                     if u.get('woman') and u['woman'] == 2:
+                         message_text += '\U0001F469\U0001F3FB\U0001F469\U0001F3FB'
+                     if u.get('woman') and u['woman'] == 3:
+                         message_text += '\U0001F469\U0001F3FB\U0001F469\U0001F3FB\U0001F469\U0001F3FB'
+                     if u.get('woman') and u['woman'] == 4:
+                         message_text += '\U0001F469\U0001F3FB\U0001F469\U0001F3FB\U0001F469\U0001F3FB\U0001F469\U0001F3FB'
+                     if u.get('woman') and u['woman'] == 5:
+                         message_text += '\U0001F469\U0001F3FB\U0001F469\U0001F3FB\U0001F469\U0001F3FB\U0001F469\U0001F3FB\U0001F469\U0001F3FB'
+                     if u.get('boy') and u['boy'] == 1:
+                         message_text += '\U0001F466\U0001F3FC'
+                     if u.get('boy') and u['boy'] == 2:
+                         message_text += '\U0001F466\U0001F3FC\U0001F466\U0001F3FC'
+                     if u.get('boy') and u['boy'] == 3:
+                         message_text += '\U0001F466\U0001F3FC\U0001F466\U0001F3FC\U0001F466\U0001F3FC'
+                     if u.get('boy') and u['boy'] == 4:
+                         message_text += '\U0001F466\U0001F3FC\U0001F466\U0001F3FC\U0001F466\U0001F3FC\U0001F466\U0001F3FC'
+                     if u.get('boy') and u['boy'] == 5:
+                         message_text += '\U0001F466\U0001F3FC\U0001F466\U0001F3FC\U0001F466\U0001F3FC\U0001F466\U0001F3FC\U0001F466\U0001F3FC'
+                     if u.get('girl') and u['girl'] == 1:
+                         message_text += '\U0001F467\U0001F3FC'
+                     if u.get('girl') and u['girl'] == 2:
+                         message_text += '\U0001F467\U0001F3FC\U0001F467\U0001F3FC'
+                     if u.get('girl') and u['girl'] == 3:
+                         message_text += '\U0001F467\U0001F3FC\U0001F467\U0001F3FC\U0001F467\U0001F3FC'
+                     if u.get('girl') and u['girl'] == 4:
+                         message_text += '\U0001F467\U0001F3FC\U0001F467\U0001F3FC\U0001F467\U0001F3FC\U0001F467\U0001F3FC'
+                     if u.get('girl') and u['girl'] == 5:
+                         message_text += '\U0001F467\U0001F3FC\U0001F467\U0001F3FC\U0001F467\U0001F3FC\U0001F467\U0001F3FC\U0001F467\U0001F3FC'
                 if u.get('car') and u['car'] == 1:
                     message_text += '\U0001F697'
                 if u.get('car') and u['car'] == 2:
