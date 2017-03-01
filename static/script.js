@@ -7,8 +7,17 @@ $(function () {
 });
 
 function fillCard(event) {
+    var description2 = event.description;
+    var description3 = description2.replace(/\n/g, "</br></br>");
+    var description4 = description3.replace(/<\/br><\/br><\/br><\/br>/g, "</br></br>");
+    var description5 = description4.replace(/<\/br>1./g, "1.");
+    var description6 = description5.replace(/<\/br>2./g, "2.");
+    var description7 = description6.replace(/<\/br>3./g, "3.");
+    var description8 = description7.replace(/<\/br>4./g, "4.");
+    var description9 = description8.replace(/<\/br>5./g, "5.");
+    var description = description9.replace(/<\/br>6./g, "6.");
     $('#title').html(event.name);
-    $('#description').html(event.description);
+    $('#description').html(description);
 
     // Create place link
     if (event.place) {
