@@ -155,6 +155,7 @@ class CommandsModule(object):
 	    CommandHandler('cancel', self.cancel_command),
             CommandHandler('invite', self.invite_channel),
             CommandHandler('raw', self.get_raw),
+            CommandHandler('users', self.get_users),
             CommandHandler('help', help_command),
             MessageHandler([Filters.text], self.message)
         ]
@@ -529,6 +530,26 @@ class CommandsModule(object):
             bot.sendMessage(
                 chat_id= allowed_users['admin'],
                 text="\u26A0\uFE0F\n\U0001F6A6 L'usuari *" +user_d+ " ha volgut convidar a algú al canal i no té permisos.\nPer donar-li permisos, el seu \U0001F194: " + str(user_id) + ".",
+                parse_mode='Markdown'
+            )
+
+    def get_users(self, bot, update):
+        user_id = update.message.from_user.id
+        if str(user_id) == allowed_users['admin']:
+            u_list = other_users.keys()
+            u_list2=sorted(u_list)
+            list_u= "Us envio el llistat d'*usuaris amb permisos* per convidar al canal:\n"
+            for u in u_list2:
+               list_u += "- " + u + "\n"
+            bot.sendMessage(
+                update.message.chat_id,
+                text= list_u,
+                parse_mode='Markdown'
+            )
+        else:
+            bot.sendMessage(
+                update.message.chat_id,
+                text="No teniu permisos per realitzar aquesta acció.",
                 parse_mode='Markdown'
             )
 
