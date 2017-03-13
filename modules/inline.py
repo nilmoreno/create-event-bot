@@ -14,7 +14,9 @@ from telegram.ext import InlineQueryHandler, CallbackQueryHandler, ChosenInlineR
 
 from store import TinyDBStore
 
-from config import params, links, allowed_users, other_users
+import requests
+
+from config import params, links, chats, allowed_users, other_users
 
 
 def create_event_payload(event):
@@ -479,12 +481,29 @@ class InlineModule(object):
                 callback_query_id=query.id
                 bot.answerCallbackQuery(callback_query_id=query.id, text="\u231B\uFE0F Ha vençut la data i s'ha arxivat l'excursió")
 
+    def go_yes(self, event, user):
+        if user['last_name'] != '':
+             r = requests.get('https://api.telegram.org/bot' + params['token'] + '/sendMessage?chat_id=' + chats['group'] + '&text=' + urllib.parse.quote("\U0001F44D\U0001F3FC *") + urllib.parse.quote(user['first_name']) + urllib.parse.quote(" ") + urllib.parse.quote(user['last_name']) + urllib.parse.quote("* s'ha afegit a l'excursió _«") + urllib.parse.quote(event.get("name")) + urllib.parse.quote('»_ \U0001F60A') +'&parse_mode=Markdown')
+             return r
+        else:
+             r = requests.get('https://api.telegram.org/bot' + params['token'] + '/sendMessage?chat_id=' + chats['group'] + '&text=' + urllib.parse.quote("\U0001F44D\U0001F3FC *") + urllib.parse.quote(user['first_name']) + urllib.parse.quote("* s'ha afegit a l'excursió _«") + urllib.parse.quote(event.get("name")) + urllib.parse.quote('»_ \U0001F60A') +'&parse_mode=Markdown')
+             return r
+
+    def go_no(self, event, user):
+        if user['last_name'] != '':
+             r = requests.get('https://api.telegram.org/bot' + params['token'] + '/sendMessage?chat_id=' + chats['group'] + '&text=' + urllib.parse.quote("\U0001F44E\U0001F3FC *") + urllib.parse.quote(user['first_name']) + urllib.parse.quote(" ") + urllib.parse.quote(user['last_name']) + urllib.parse.quote("* s'ha desapuntat de l'excursió _«") + urllib.parse.quote(event.get("name")) + urllib.parse.quote('»_ \U0001F622') +'&parse_mode=Markdown')
+             return r
+        else:
+             r = requests.get('https://api.telegram.org/bot' + params['token'] + '/sendMessage?chat_id=' + chats['group'] + '&text=' + urllib.parse.quote("\U0001F44E\U0001F3FC *") + urllib.parse.quote(user['first_name']) + urllib.parse.quote("* s'ha desapuntat de l'excursió _«") + urllib.parse.quote(event.get("name")) + urllib.parse.quote('»_ \U0001F622') +'&parse_mode=Markdown')
+             return r
+
     def toggle_user(self, event, user):
         if not event.get('users'):
             event['users'] = []
 
         if any(u['id'] == user['id'] for u in event['users']):
             event['users'].remove(user)
+            self.go_no(event, user)
         else:
             user.update({'man': 0})
             user.update({'woman': 0})
@@ -492,6 +511,7 @@ class InlineModule(object):
             user.update({'girl': 0})
             user.update({'car': 0})
             event['users'].append(user)
+            self.go_yes(event, user)
 
         self.store.update_event(event)
         return event
