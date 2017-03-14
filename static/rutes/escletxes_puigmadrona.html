@@ -41,6 +41,7 @@
 	<script type="text/javascript" src="assets/js/leaflet-control-credits.js"></script>
         <script type="text/javascript" src="assets/hiking-js/escletxes_puigmadrona.js"></script>
 	<script type="text/javascript" src="assets/js/leaflet.hotline.js"></script>
+	<script type="text/javascript" src="assets/js/thunderforest.js"></script>
 	 
 </head>
 <body>
@@ -50,7 +51,7 @@
 	<script type="text/javascript">
 	var map = L.map('map').setView([41.716, 1.708], 8);
 
-   	var osmLayer = L.tileLayer('http://{s}.tile.thunderforest.com/outdoors/{z}/{x}/{y}.png', {
+   	var osmLayer = L.tileLayer('https://{s}.tile.thunderforest.com/outdoors/{z}/{x}/{y}.png' + apikey, {
         attribution: 'Tessel&middot;les de <a href="http://mapbox.com/">MapBox<\/a> (sat&egrave;l&middot;lit)'
         }).addTo(map);
 

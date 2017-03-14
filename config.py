@@ -13,6 +13,10 @@ other_users={
     'namex': 'USER_ID'
 }
 
+chats={
+    'group': 'GROUP_ID'
+}
+
 params={
     'token': 'TOKEN'
 }

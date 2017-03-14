@@ -1,0 +1,2 @@
+var apikey = '?apikey=APIKEY'
+
