@@ -55,7 +55,7 @@
         attribution: 'Tessel&middot;les de <a href="http://mapbox.com/">MapBox<\/a> (sat&egrave;l&middot;lit)'
         }).addTo(map);
 
-        var stamenLayer = L.tileLayer('http://{s}.tiles.mapbox.com/v3/51114u9.kogin3jb/{z}/{x}/{y}.png', {
+        var stamenLayer = L.tileLayer('https://api.mapbox.com/v4/mapbox.satellite/{z}/{x}/{y}.png' + token, {
         attribution:
             'i tessel&middot;les de <a href="http://thunderforest.com">Thunderforest<\/a>, ' +
             '<a href="http://creativecommons.org/licenses/by-sa/2.0">CC BY-SA 2.0<\/a> &mdash; ' +

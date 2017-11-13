@@ -2,7 +2,7 @@
 <html>
 <head>
 	<!-- INDICAR NOM DE LA PÀGINA -->
-	<title>Castell de Cervelló</title>
+	<title>Ruta de les cales del Garraf</title>
 	<link rel="shortcut icon" href="../favicon.png"/>
 	<meta http-equiv="Content-Type" content="text/html" charset="UTF-8"/>
 	<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
@@ -24,7 +24,7 @@
 	
 	<script type="text/javascript">
         /* INDICAR ALÇADA MÀXIMA DEL PERFIL */
-	var altmax = 800
+	var altmax = 300
 	var altmin = 0
         var _DEFAULT_POLYLINE_OPTS = {
              color: 'blue',
@@ -39,7 +39,7 @@
 	<script type="text/javascript" src="assets/js/leaflet.elevation-0.0.4.src.js"></script>
 	<script type="text/javascript" src="assets/js/gpx.js"></script>
 	<script type="text/javascript" src="assets/js/leaflet-control-credits.js"></script>
-        <script type="text/javascript" src="assets/hiking-js/castellcervello.js"></script>
+        <script type="text/javascript" src="assets/hiking-js/ruta-cales-garraf.js"></script>
 	<script type="text/javascript" src="assets/js/leaflet.hotline.js"></script>
 	<script type="text/javascript" src="assets/js/thunderforest.js"></script>
 	 
@@ -55,7 +55,7 @@
         attribution: 'Tessel&middot;les de <a href="http://mapbox.com/">MapBox<\/a> (sat&egrave;l&middot;lit)'
         }).addTo(map);
 
-        var stamenLayer = L.tileLayer('https://api.mapbox.com/v4/mapbox.satellite/{z}/{x}/{y}.png' + token, {
+        var stamenLayer = L.tileLayer('http://{s}.tiles.mapbox.com/v3/51114u9.kogin3jb/{z}/{x}/{y}.png', {
         attribution:
             'i tessel&middot;les de <a href="http://thunderforest.com">Thunderforest<\/a>, ' +
             '<a href="http://creativecommons.org/licenses/by-sa/2.0">CC BY-SA 2.0<\/a> &mdash; ' +
@@ -85,7 +85,7 @@
 		var el = L.control.elevation();
 		el.addTo(map);
 		/* INDICAR RUTA FITXER GPX */
-		var g=new L.GPX("./gpx/castellcervello.gpx", {
+		var g=new L.GPX("./gpx/ruta-cales-garraf.gpx", {
 			async: true,
 			 marker_options: {
 			    startIconUrl: './assets/img/pin-icon-start.png',
