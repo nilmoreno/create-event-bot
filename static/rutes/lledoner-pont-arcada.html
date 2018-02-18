@@ -2,7 +2,7 @@
 <html>
 <head>
 	<!-- INDICAR NOM DE LA PÀGINA -->
-	<title>Ruta de les cales del Garraf</title>
+	<title>Lledoner i el Pont de l'Arcada</title>
 	<link rel="shortcut icon" href="../favicon.png"/>
 	<meta http-equiv="Content-Type" content="text/html" charset="UTF-8"/>
 	<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
@@ -24,8 +24,8 @@
 	
 	<script type="text/javascript">
         /* INDICAR ALÇADA MÀXIMA DEL PERFIL */
-	var altmax = 300
-	var altmin = 0
+	var altmax = 650
+	var altmin = 200
         var _DEFAULT_POLYLINE_OPTS = {
              color: 'blue',
              opacity: '0'
@@ -39,7 +39,7 @@
 	<script type="text/javascript" src="assets/js/leaflet.elevation-0.0.4.src.js"></script>
 	<script type="text/javascript" src="assets/js/gpx.js"></script>
 	<script type="text/javascript" src="assets/js/leaflet-control-credits.js"></script>
-        <script type="text/javascript" src="assets/hiking-js/ruta-cales-garraf.js"></script>
+        <script type="text/javascript" src="assets/hiking-js/lledoner-pont-arcada.js"></script>
 	<script type="text/javascript" src="assets/js/leaflet.hotline.js"></script>
 	<script type="text/javascript" src="assets/js/thunderforest.js"></script>
 	 
@@ -85,7 +85,7 @@
 		var el = L.control.elevation();
 		el.addTo(map);
 		/* INDICAR RUTA FITXER GPX */
-		var g=new L.GPX("./gpx/ruta-cales-garraf.gpx", {
+		var g=new L.GPX("./gpx/lledoner-pont-arcada.gpx", {
 			async: true,
 			 marker_options: {
 			    startIconUrl: './assets/img/pin-icon-start.png',
